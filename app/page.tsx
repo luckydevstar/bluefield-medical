@@ -3,7 +3,8 @@ import { PageRenderer } from '@/components/PageRenderer';
 import { loadPageSections } from '@/lib/loadPageSections';
 
 async function HomePage() {
-  const sections = await loadPageSections('home');
+  const slist = ['header', 'hero', 'footer'];
+  const sections = await loadPageSections('home', slist);
 
   return (
     <main className="min-h-screen">

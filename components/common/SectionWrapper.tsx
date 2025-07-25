@@ -30,8 +30,7 @@ export function SectionWrapper({
   return (
     <div 
       className="relative group transition-all duration-200 hover:ring-2 hover:ring-blue-500 hover:ring-opacity-50"
-      style={{ isolation: 'isolate' }}
-    >
+      >
       {children}
       
       <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-50">
