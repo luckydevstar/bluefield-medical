@@ -37,17 +37,17 @@ export function HeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormPr
   };
 
   return (
-    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DrawerContent className="max-w-2xl mx-auto">
+    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()} direction="bottom">
+      <DrawerContent className="mx-auto h-screen max-w-2xl">
         <DrawerHeader>
           <DrawerTitle>Edit Hero Section</DrawerTitle>
           <DrawerDescription>
             Update the content for your hero section
           </DrawerDescription>
         </DrawerHeader>
-        
-        <form onSubmit={handleSubmit} className="px-4">
-          <div className="space-y-6">
+
+        <form onSubmit={handleSubmit} className="px-4 flex-1 flex flex-col" style={{ height: 'calc(100% - 150px)' }}>
+          <div className="space-y-6 overflow-auto" style={{ height: 'calc(100% - 50px)' }}>
             <div className="space-y-2">
               <Label htmlFor="title">Title</Label>
               <Input
@@ -90,7 +90,7 @@ export function HeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormPr
                   placeholder="Button text"
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="ctaLink">CTA Button Link</Label>
                 <Input
@@ -103,14 +103,18 @@ export function HeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormPr
             </div>
           </div>
 
-          <DrawerFooter className="px-0">
-            <Button type="submit">Save Changes</Button>
-            <DrawerClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DrawerClose>
+          <DrawerFooter className="px-0 grid grid-cols-2">
+            <div className="col-span-1">
+              <Button type="submit" className='w-full'>Save Changes</Button>
+            </div>
+            <div className="col-span-1">
+              <DrawerClose asChild className='w-full'>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </div>
           </DrawerFooter>
         </form>
       </DrawerContent>
-    </Drawer>
+    </Drawer >
   );
 }
