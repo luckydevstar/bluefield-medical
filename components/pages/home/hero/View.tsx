@@ -15,7 +15,7 @@ interface HeroViewProps {
 
 export function HeroView({ data }: HeroViewProps) {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-[660px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
           src={data.image}
@@ -28,13 +28,13 @@ export function HeroView({ data }: HeroViewProps) {
       </div>
       
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+        <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
           {data.title}
         </h1>
         <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
           {data.subtitle}
         </p>
-        <Button size="lg" className="text-lg px-8 py-4">
+        <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
           {data.ctaText}
         </Button>
       </div>

@@ -30,11 +30,11 @@ export function HeaderView({ data }: HeaderViewProps) {
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full border-b bg-darkblue backdrop-blur supports-[backdrop-filter]:bg-darkblue">
-                <nav className="mx-auto flex max-w-7xl items-center justify-between py-4 px-6 lg:px-8" aria-label="Global">
+            <header className="sticky top-0 z-50 w-full bg-darkblue backdrop-blur supports-[backdrop-filter]:bg-darkblue">
+                <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
                         <Link href="/" className="-m-1.5 p-1.5">
-                            <img src={data.logo.url} alt='logo' className='w-[150px] lg:w-[190px]' />
+                            <img src={data.logo.url} alt='logo' className='w-[120px] lg:w-[160px]' />
                         </Link>
                     </div>
                     <div className='flex items-center gap-4 lg:gap-12 '>
