@@ -1,0 +1,5 @@
+export function HearingAidsHeaderAdminForm() {
+  return (
+    <></>
+  )
+}

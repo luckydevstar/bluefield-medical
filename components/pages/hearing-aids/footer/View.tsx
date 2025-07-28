@@ -39,7 +39,7 @@ interface FooterViewProps {
     data: FooterData;
 }
 
-export function HomeFooterView({ data }: FooterViewProps) {
+export function HearingAidsFooterView({ data }: FooterViewProps) {
     return (
         <footer className="bg-darkblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">

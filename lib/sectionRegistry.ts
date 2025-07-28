@@ -1,19 +1,22 @@
-import { HeroView } from '@/components/pages/home/hero/View';
-import { HeroAdminForm } from '@/components/pages/home/hero/AdminForm';
-import { HeaderView } from '@/components/pages/home/header/View';
-import { HeaderAdminForm } from '@/components/pages/home/header/AdminForm';
-import { FooterView } from '@/components/pages/home/footer/View';
-import { FooterAdminForm } from '@/components/pages/home/footer/AdminForm';
-import { HomePerksView } from '@/components/pages/home/perks/View';
-import { HomePerksAdminForm } from '@/components/pages/home/perks/AdminForm';
-import { HomeStepsView } from '@/components/pages/home/step/View';
-import { HomeStepsAdminForm } from '@/components/pages/home/step/AdminForm';
-import { HomeServiceView } from '@/components/pages/home/service/View';
-import { HomeServiceAdminForm } from '@/components/pages/home/service/AdminForm';
-import { HomeTestominalView } from '@/components/pages/home/testominal/View';
-import { HomeTestominalAdminForm } from '@/components/pages/home/testominal/AdminForm';
-import { HomeFAQView } from '@/components/pages/home/faq/View';
-import { HomeFAQAdminForm } from '@/components/pages/home/faq/AdminForm';
+import {
+  HomeFAQAdminForm,
+  HomeFAQView,
+  HomeFooterAdminForm,
+  HomeFooterView,
+  HomeHeaderAdminForm,
+  HomeHeaderView,
+  HomeHeroAdminForm,
+  HomeHeroView,
+  HomePerksAdminForm,
+  HomePerksView,
+  HomeServiceAdminForm,
+  HomeServiceView,
+  HomeStepsAdminForm,
+  HomeStepsView,
+  HomeTestominalView
+} from "@/components/pages/home";
+
+import { HearingAidsFooterAdminForm, HearingAidsFooterView, HearingAidsHeaderAdminForm, HearingAidsHeaderView, HearingAidsHeroAdminForm, HearingAidsHeroView } from "@/components/pages/hearing-aids";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -28,12 +31,12 @@ export interface SectionComponent {
 export const sectionRegistry: Record<string, Record<string, SectionComponent>> = {
   home: {
     header: {
-      View: HeaderView,
-      AdminForm: HeaderAdminForm
+      View: HomeHeaderView,
+      AdminForm: HomeHeaderAdminForm
     },
     hero: {
-      View: HeroView,
-      AdminForm: HeroAdminForm,
+      View: HomeHeroView,
+      AdminForm: HomeHeroAdminForm,
     },
     step: {
       View: HomeStepsView,
@@ -49,17 +52,31 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     },
     testominal: {
       View: HomeTestominalView,
-      AdminForm: HomeTestominalAdminForm
+      AdminForm: HomeTestominalView
     },
     faq: {
       View: HomeFAQView,
       AdminForm: HomeFAQAdminForm
     },
     footer: {
-      View: FooterView,
-      AdminForm: FooterAdminForm
+      View: HomeFooterView,
+      AdminForm: HomeFooterAdminForm
     }
   },
+  "hearing-aids": {
+    header: {
+      View: HearingAidsHeaderView,
+      AdminForm: HearingAidsHeaderAdminForm
+    },
+    hero: {
+      View: HearingAidsHeroView,
+      AdminForm: HearingAidsHeroAdminForm
+    },
+    footer: {
+      View: HearingAidsFooterView,
+      AdminForm: HearingAidsFooterAdminForm
+    }
+  }
 };
 
 export function getSectionComponent(page: string, section: string): SectionComponent | null {

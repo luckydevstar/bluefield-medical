@@ -13,7 +13,7 @@ interface HeroViewProps {
   data: HeroData;
 }
 
-export function HomeHeroView({ data }: HeroViewProps) {
+export function HeroView({ data }: HeroViewProps) {
   return (
     <section className="relative min-h-[660px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">

@@ -23,7 +23,7 @@ interface HeroAdminFormProps {
   onSave: (data: HeroData) => void;
 }
 
-export function HomeHeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormProps) {
+export function HeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormProps) {
   const [formData, setFormData] = useState<HeroData>(data);
 
   const handleSubmit = (e: React.FormEvent) => {

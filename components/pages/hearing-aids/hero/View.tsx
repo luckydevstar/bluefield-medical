@@ -1,24 +1,24 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
-export interface HeroData {
+export interface HearingAidsHeroData {
   title: string;
-  subtitle: string;
-  image: string;
-  ctaText: string;
-  ctaLink: string;
+  image: {
+    key: string,
+    url: string
+  };
 }
 
-interface HeroViewProps {
-  data: HeroData;
+interface HearingAidsHeroViewProps {
+  data: HearingAidsHeroData;
 }
 
-export function HomeHeroView({ data }: HeroViewProps) {
+export function HearingAidsHeroView({ data }: HearingAidsHeroViewProps) {
   return (
     <section className="relative min-h-[660px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src={data.image}
+          src={data.image.url}
           alt={data.title}
           fill
           className="object-cover"
@@ -31,12 +31,6 @@ export function HomeHeroView({ data }: HeroViewProps) {
         <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
           {data.title}
         </h1>
-        <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
-          {data.subtitle}
-        </p>
-        <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
-          {data.ctaText}
-        </Button>
       </div>
     </section>
   );

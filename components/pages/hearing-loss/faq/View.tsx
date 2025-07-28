@@ -4,7 +4,6 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button";
 
 type FAQItem = {
     title: string;
@@ -52,9 +51,6 @@ export function HomeFAQView({ data }: HomeFAQViewProps) {
                         })
                     }
                 </Accordion>
-                <Button size="lg" className="mt-8 text-base px-8 py-4 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
-                    {data.cta.label}
-                </Button>
             </div>
         </section>
     );
