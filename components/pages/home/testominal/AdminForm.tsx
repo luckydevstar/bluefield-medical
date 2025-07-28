@@ -1,0 +1,5 @@
+export function HomeTestominalAdminForm() {
+  return (
+    <></>
+  )
+}
