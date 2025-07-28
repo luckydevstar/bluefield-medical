@@ -16,7 +16,24 @@ import {
   HomeTestominalView
 } from "@/components/pages/home";
 
-import { HearingAidsFooterAdminForm, HearingAidsFooterView, HearingAidsHeaderAdminForm, HearingAidsHeaderView, HearingAidsHeroAdminForm, HearingAidsHeroView } from "@/components/pages/hearing-aids";
+import {
+  HearingAidsBannerAdminForm,
+  HearingAidsBannerView,
+  HearingAidsDiscoverAdminForm,
+  HearingAidsDiscoverView,
+  HearingAidsFAQAdminForm,
+  HearingAidsFAQView,
+  HearingAidsFooterAdminForm,
+  HearingAidsFooterView,
+  HearingAidsHeaderAdminForm,
+  HearingAidsHeaderView,
+  HearingAidsHeroAdminForm,
+  HearingAidsHeroView,
+  HearingAidsShowcaseAdminForm,
+  HearingAidsShowcaseView,
+  HearingAidsTestominalAdminForm,
+  HearingAidsTestominalView
+} from "@/components/pages/hearing-aids";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -71,6 +88,26 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     hero: {
       View: HearingAidsHeroView,
       AdminForm: HearingAidsHeroAdminForm
+    },
+    banner: {
+      View: HearingAidsBannerView,
+      AdminForm: HearingAidsBannerAdminForm
+    },
+    showcase: {
+      View: HearingAidsShowcaseView,
+      AdminForm: HearingAidsShowcaseAdminForm
+    },
+    testominal: {
+      View: HearingAidsTestominalView,
+      AdminForm: HearingAidsTestominalAdminForm
+    },
+    discover: {
+      View: HearingAidsDiscoverView,
+      AdminForm: HearingAidsDiscoverAdminForm
+    },
+    faq: {
+      View: HearingAidsFAQView,
+      AdminForm: HearingAidsFAQAdminForm
     },
     footer: {
       View: HearingAidsFooterView,

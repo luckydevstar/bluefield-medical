@@ -3,7 +3,7 @@ import { PageRenderer } from '@/components/PageRenderer';
 import { loadPageSections } from '@/lib/loadPageSections';
 
 async function HomePage() {
-  const slist = ['header', 'hero', 'faq', 'footer'];
+  const slist = ['header', 'hero', 'banner', 'showcase', 'testominal', 'discover', 'faq', 'footer'];
   const sections = await loadPageSections('hearing-aids', slist);
 
   return (
