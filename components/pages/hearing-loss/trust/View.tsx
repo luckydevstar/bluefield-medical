@@ -4,33 +4,28 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
-import { Button } from "@/components/ui/button";
 
-type FAQItem = {
+type TrustItem = {
     title: string;
     description: string;
 };
 
-type FAQCallToAction = {
-    label: string;
-    link: string;
-};
-
-export interface FAQData {
+export interface HearingLossTrustData {
     title: string;
-    faqs: FAQItem[];
-    cta: FAQCallToAction;
+    subtitle: string;
+    trusts: TrustItem[];
 }
 
-interface HearingLossFAQViewProps {
-    data: FAQData
+interface HearingLossTrustViewProps {
+    data: HearingLossTrustData
 }
 
-export function HearingLossFAQView({ data }: HearingLossFAQViewProps) {
+export function HearingLossTrustView({ data }: HearingLossTrustViewProps) {
     return (
-        <section className="bg-white">
-            <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                <h1 className="text-3xl font-black text-darkblue">{data.title}</h1>
+        <div className="bg-white">
+            <div className="mx-auto max-w-7xl overflow-hidden px-6 py-8 sm:py-6 lg:px-8">
+                <h1 className="text-3xl font-bold text-darkblue text-center">{data.title}</h1>
+                <p className="text-lg text-darkblue my-8">{data.subtitle}</p>
                 <Accordion
                     type="single"
                     collapsible
@@ -38,7 +33,7 @@ export function HearingLossFAQView({ data }: HearingLossFAQViewProps) {
                     defaultValue="item-1"
                 >
                     {
-                        data.faqs.map((item, idx) => {
+                        data.trusts.map((item, idx) => {
                             return (
                                 <AccordionItem value={`item-${idx}`} key={idx}>
                                     <AccordionTrigger className="text-darkblue hover:no-underline hover:text-lightblue text-lg font-bold">{item.title}</AccordionTrigger>
@@ -52,10 +47,7 @@ export function HearingLossFAQView({ data }: HearingLossFAQViewProps) {
                         })
                     }
                 </Accordion>
-                <Button size="lg" className="mt-8 text-base px-8 py-4 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
-                    {data.cta.label}
-                </Button>
             </div>
-        </section>
-    );
+        </div>
+    )
 }

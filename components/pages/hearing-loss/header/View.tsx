@@ -25,7 +25,7 @@ interface HeaderViewProps {
     data: HeaderData
 }
 
-export function HeaderView({ data }: HeaderViewProps) {
+export function HearingLossHeaderView({ data }: HeaderViewProps) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
 
     return (

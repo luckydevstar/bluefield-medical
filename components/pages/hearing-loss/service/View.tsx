@@ -1,6 +1,3 @@
-import Link from 'next/link';
-import { Twitter, Linkedin, Github } from 'lucide-react';
-
 type ServiceImage = {
     key: string;
     url: string;
@@ -13,28 +10,32 @@ type ServiceItem = {
 };
 
 export interface ServicesData {
+    title: string,
+    subtitle: string;
     services: ServiceItem[];
 }
 
-interface HomeServiceViewProps {
+interface HearingLossServiceViewProps {
     data: ServicesData
 }
 
 
-export function HomeServiceView({ data }: HomeServiceViewProps) {
+export function HearingLossServiceView({ data }: HearingLossServiceViewProps) {
     return (
         <div className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-8 sm:py-6 lg:px-8">
+                <h1 className="text-3xl font-bold text-darkblue text-center">{data.title}</h1>
+                <p className="text-lg text-darkblue my-8">{data.subtitle}</p>
                 <div className='w-full gap-x-4 gap-y-12 flex flex-col'>
                     {
                         data.services.map((item, idx) => {
                             return (
-                                <div 
-                                    key={idx} 
+                                <div
+                                    key={idx}
                                     className='flex flex-col lg:flex-row items-center gap-16'
                                 >
-                                    <div 
-                                        className={`w-[475px] lg:order-${idx % 2 ? 2 : 1}`} 
+                                    <div
+                                        className={`w-[475px] lg:order-${idx % 2 ? 2 : 1}`}
                                         key={idx}
                                     >
                                         <img src={item.image.url} className='object-contain h-auto' />

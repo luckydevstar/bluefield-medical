@@ -1,4 +1,4 @@
-export function HeaderAdminForm() {
+export function HearingLossHeaderAdminForm() {
   return (
     <></>
   )

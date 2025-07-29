@@ -34,6 +34,7 @@ import {
   HearingAidsTestominalAdminForm,
   HearingAidsTestominalView
 } from "@/components/pages/hearing-aids";
+import { HearingLossBannerAdminForm, HearingLossBannerView, HearingLossCTAAdminForm, HearingLossCTAView, HearingLossFAQAdminForm, HearingLossFAQView, HearingLossFooterAdminForm, HearingLossFooterView, HearingLossHeaderAdminForm, HearingLossHeaderView, HearingLossHeroAdminForm, HearingLossHeroView, HearingLossServiceAdminForm, HearingLossServiceView, HearingLossTestominalAdminForm, HearingLossTestominalView, HearingLossTrustAdminForm, HearingLossTrustView } from "@/components/pages/hearing-loss";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -112,6 +113,44 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     footer: {
       View: HearingAidsFooterView,
       AdminForm: HearingAidsFooterAdminForm
+    }
+  },
+  "hearing-loss": {
+    header: {
+      View: HearingLossHeaderView,
+      AdminForm: HearingLossHeaderAdminForm
+    },
+    hero: {
+      View: HearingLossHeroView,
+      AdminForm: HearingLossHeroAdminForm
+    },
+    banner: {
+      View: HearingLossBannerView,
+      AdminForm: HearingLossBannerAdminForm
+    },
+    trust: {
+      View: HearingLossTrustView,
+      AdminForm: HearingLossTrustAdminForm
+    },
+    cta: {
+      View: HearingLossCTAView,
+      AdminForm: HearingLossCTAAdminForm
+    },
+    service: {
+      View: HearingLossServiceView,
+      AdminForm: HearingLossServiceAdminForm
+    },
+    testominal: {
+      View: HearingLossTestominalView,
+      AdminForm: HearingLossTestominalAdminForm
+    },
+    faq: {
+      View: HearingLossFAQView,
+      AdminForm: HearingLossFAQAdminForm
+    },
+    footer: {
+      View: HearingLossFooterView,
+      AdminForm: HearingLossFooterAdminForm
     }
   }
 };

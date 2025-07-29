@@ -1,5 +1,5 @@
-export function HomeTestominalAdminForm() {
-  return (
-    <></>
-  )
+export function HearingLossTestominalAdminForm() {
+    return (
+        <></>
+    )
 }
