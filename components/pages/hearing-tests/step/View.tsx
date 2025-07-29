@@ -1,47 +1,58 @@
-import Link from 'next/link';
-import { Twitter, Linkedin, Github } from 'lucide-react';
+import { Button } from "@/components/ui/button";
 
-type StepImage = {
-    key: string;
-    url: string;
-};
-
-type StepItem = {
+interface StepData {
     title: string;
-    description: string;
-    image: StepImage;
-};
-
-export interface ProcessStepsData {
-    title: string;
-    steps: StepItem[];
+    subtitle: string;
+    briefs: string[];
+    steps: {
+        title: string;
+        description: string
+    }[],
+    cta: {
+        label: string;
+        link: string
+    }
 }
 
-interface HomeStepsViewProps {
-    data: ProcessStepsData;
+interface StepViewProps {
+    data: StepData
 }
 
-export function HomeStepsView({ data }: HomeStepsViewProps) {
+export function HearingTestsStepView({ data }: StepViewProps) {
     return (
         <section className="bg-white">
-            <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                <h1 className="text-2xl md:text-3xl text-center font-semibold mb-10">{data.title}</h1>
-                <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-6 gap-x-6'>
-                {
-                    data.steps.map((item, idx) => {
-                        return (
-                            <div className='col-span-1 flex flex-col gap-5' key={idx}>
-                                <div className='w-full h-72 flex justify-center'>
-                                    <img src={item.image.url} className='w-full h-auto object-contain' alt={item.title} />
-                                </div>
-                                <h2 className="text-md font-semibold">{`0${idx+1} ${item.title}`}</h2>
-                                <p className='text-slate-600 font-sm'>{item.description}</p>
-                            </div>
-                        )
-                    })
-                }
+            <div className="mx-auto max-w-7xl overflow-hidden px-6 py-16 sm:py-20 lg:px-8">
+                <div className="flex flex-col gap-8">
+                    <h1 className="text-2xl lg:text-3xl font-bold text-darkblue">{data.title}</h1>
+                    <div className="flex flex-col gap-2">
+                        <p className="text-base lg:text-lg text-darkblue">{data.subtitle}</p>
+                        <ul className="list-inside list-disc">
+                            {
+                                data.briefs.map((item, idx) => {
+                                    return (
+                                        <li key={idx}>{item}</li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-darkblue">
+                        {
+                            data.steps.map((item, idx) => {
+                                return (
+                                    <div className="flex flex-col gap-1" key={idx}>
+                                        <h2 className="text-base lg:text-lg font-semibold">{item.title}</h2>
+                                        <p className="text-base lg:text-lg">{item.description}</p>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                    <Button size="lg" className="w-max text-base px-16 py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
+                        {data.cta.label}
+                    </Button>
                 </div>
             </div>
         </section>
-    );
+    )
 }

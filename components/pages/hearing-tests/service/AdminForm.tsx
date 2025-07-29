@@ -1,4 +1,4 @@
-export function HomeServiceAdminForm() {
+export function HearingTestsServiceAdminForm() {
   return (
     <></>
   )

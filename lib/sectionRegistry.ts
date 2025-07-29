@@ -1,40 +1,44 @@
 import {
-  HomeFAQAdminForm,
-  HomeFAQView,
-  HomeFooterAdminForm,
-  HomeFooterView,
-  HomeHeaderAdminForm,
-  HomeHeaderView,
-  HomeHeroAdminForm,
-  HomeHeroView,
-  HomePerksAdminForm,
-  HomePerksView,
-  HomeServiceAdminForm,
-  HomeServiceView,
-  HomeStepsAdminForm,
-  HomeStepsView,
-  HomeTestominalView
+  HomeFAQAdminForm, HomeFAQView,
+  HomeFooterAdminForm, HomeFooterView,
+  HomeHeaderAdminForm, HomeHeaderView,
+  HomeHeroAdminForm, HomeHeroView,
+  HomePerksAdminForm, HomePerksView,
+  HomeServiceAdminForm, HomeServiceView,
+  HomeStepsAdminForm, HomeStepsView,
+  HomeTestominalAdminForm, HomeTestominalView
 } from "@/components/pages/home";
 
 import {
-  HearingAidsBannerAdminForm,
-  HearingAidsBannerView,
-  HearingAidsDiscoverAdminForm,
-  HearingAidsDiscoverView,
-  HearingAidsFAQAdminForm,
-  HearingAidsFAQView,
-  HearingAidsFooterAdminForm,
-  HearingAidsFooterView,
-  HearingAidsHeaderAdminForm,
-  HearingAidsHeaderView,
-  HearingAidsHeroAdminForm,
-  HearingAidsHeroView,
-  HearingAidsShowcaseAdminForm,
-  HearingAidsShowcaseView,
-  HearingAidsTestominalAdminForm,
-  HearingAidsTestominalView
+  HearingAidsBannerAdminForm,HearingAidsBannerView,
+  HearingAidsDiscoverAdminForm,HearingAidsDiscoverView,
+  HearingAidsFAQAdminForm,HearingAidsFAQView,
+  HearingAidsFooterAdminForm,HearingAidsFooterView,
+  HearingAidsHeaderAdminForm,HearingAidsHeaderView,
+  HearingAidsHeroAdminForm,HearingAidsHeroView,
+  HearingAidsShowcaseAdminForm,HearingAidsShowcaseView,
+  HearingAidsTestominalAdminForm,HearingAidsTestominalView
 } from "@/components/pages/hearing-aids";
-import { HearingLossBannerAdminForm, HearingLossBannerView, HearingLossCTAAdminForm, HearingLossCTAView, HearingLossFAQAdminForm, HearingLossFAQView, HearingLossFooterAdminForm, HearingLossFooterView, HearingLossHeaderAdminForm, HearingLossHeaderView, HearingLossHeroAdminForm, HearingLossHeroView, HearingLossServiceAdminForm, HearingLossServiceView, HearingLossTestominalAdminForm, HearingLossTestominalView, HearingLossTrustAdminForm, HearingLossTrustView } from "@/components/pages/hearing-loss";
+import { 
+  HearingLossBannerAdminForm, HearingLossBannerView, 
+  HearingLossCTAAdminForm, HearingLossCTAView, 
+  HearingLossFAQAdminForm, HearingLossFAQView, 
+  HearingLossFooterAdminForm, HearingLossFooterView, 
+  HearingLossHeaderAdminForm, HearingLossHeaderView, 
+  HearingLossHeroAdminForm, HearingLossHeroView, 
+  HearingLossServiceAdminForm, HearingLossServiceView, 
+  HearingLossTestominalAdminForm, HearingLossTestominalView, 
+  HearingLossTrustAdminForm, HearingLossTrustView } from "@/components/pages/hearing-loss";
+import { 
+  HearingTestsBannerAdminForm, HearingTestsBannerView, 
+  HearingTestsFAQView, HearingTestsFooterAdminForm, 
+  HearingTestsFooterView, HearingTestsHeaderAdminForm, 
+  HearingTestsHeaderView, HearingTestsHeroAdminForm, 
+  HearingTestsHeroView, HearingTestsKnowAdminForm, 
+  HearingTestsKnowView, HearingTestsServiceAdminForm, 
+  HearingTestsServiceView, HearingTestsFAQAdminForm,
+  HearingTestsStepAdminForm, HearingTestsStepView, 
+  HearingTestsTestominalAdminForm, HearingTestsTestominalView } from "@/components/pages/hearing-tests";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -70,7 +74,7 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     },
     testominal: {
       View: HomeTestominalView,
-      AdminForm: HomeTestominalView
+      AdminForm: HomeTestominalAdminForm
     },
     faq: {
       View: HomeFAQView,
@@ -151,6 +155,44 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     footer: {
       View: HearingLossFooterView,
       AdminForm: HearingLossFooterAdminForm
+    }
+  },
+  "hearing-tests": {
+    header: {
+      View: HearingTestsHeaderView,
+      AdminForm: HearingTestsHeaderAdminForm
+    },
+    hero: {
+      View: HearingTestsHeroView,
+      AdminForm: HearingTestsHeroAdminForm
+    },
+    banner: {
+      View: HearingTestsBannerView,
+      AdminForm: HearingTestsBannerAdminForm
+    },
+    step: {
+      View: HearingTestsStepView,
+      AdminForm: HearingTestsStepAdminForm
+    },
+    know: {
+      View: HearingTestsKnowView,
+      AdminForm: HearingTestsKnowAdminForm
+    },
+    service: {
+      View: HearingTestsServiceView,
+      AdminForm: HearingTestsServiceAdminForm
+    },
+    testominal: {
+      View: HearingTestsTestominalView,
+      AdminForm: HearingTestsTestominalAdminForm
+    },
+    faq: {
+      View: HearingTestsFAQView,
+      AdminForm: HearingTestsFAQAdminForm
+    },
+    footer: {
+      View: HearingTestsFooterView,
+      AdminForm: HearingTestsFooterAdminForm
     }
   }
 };

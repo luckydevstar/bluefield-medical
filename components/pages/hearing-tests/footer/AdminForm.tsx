@@ -1,4 +1,4 @@
-export function FooterAdminForm() {
+export function HearingTestsFooterAdminForm() {
   return (
     <></>
   )

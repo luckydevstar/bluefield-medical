@@ -4,6 +4,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion"
+import { Button } from "@/components/ui/button";
 
 type FAQItem = {
     title: string;
@@ -21,11 +22,11 @@ export interface FAQData {
     cta: FAQCallToAction;
 }
 
-interface HomeFAQViewProps {
+interface HearingTestsFAQViewProps {
     data: FAQData
 }
 
-export function HomeFAQView({ data }: HomeFAQViewProps) {
+export function HearingTestsFAQView({ data }: HearingTestsFAQViewProps) {
     return (
         <section className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
@@ -51,6 +52,9 @@ export function HomeFAQView({ data }: HomeFAQViewProps) {
                         })
                     }
                 </Accordion>
+                <Button size="lg" className="mt-8 text-base px-8 py-4 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
+                    {data.cta.label}
+                </Button>
             </div>
         </section>
     );

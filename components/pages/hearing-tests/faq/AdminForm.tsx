@@ -1,4 +1,4 @@
-export function HomeFAQAdminForm() {
+export function HearingTestsFAQAdminForm() {
   return (
     <></>
   )
