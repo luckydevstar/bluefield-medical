@@ -1,0 +1,28 @@
+{
+    "logo": {
+        "key": "2zcIufwhV9A86TZQeau1zA0BiTfGNuL4dPpOgaCqKWFVXroU",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A86TZQeau1zA0BiTfGNuL4dPpOgaCqKWFVXroU"
+    },
+    "nav_links": [
+        {
+            "name": "Hearing Aids",
+            "url": "/hearing-aids"
+        },
+        {
+            "name": "Hearing Loss",
+            "url": "/hearing-loss"
+        },
+        {
+            "name": "Hearing Tests",
+            "url": "/hearing-tests"
+        },
+        {
+            "name": "Locations",
+            "url": "/locations"
+        }
+    ],
+    "cta": {
+        "label": "BOOK ONLINE",
+        "url": "/book-now"
+    }
+}

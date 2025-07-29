@@ -35,12 +35,12 @@ export function HearingLossServiceView({ data }: HearingLossServiceViewProps) {
                                     className='flex flex-col lg:flex-row items-center gap-16'
                                 >
                                     <div
-                                        className={`w-[475px] lg:order-${idx % 2 ? 2 : 1}`}
+                                        className={`w-[475px] ${idx % 2 ? 'lg:order-2' : 'lg:order-1'}`}
                                         key={idx}
                                     >
                                         <img src={item.image.url} className='object-contain h-auto' />
                                     </div>
-                                    <div className='flex flex-col gap-6 flex-1 lg:justify-center items-center'>
+                                    <div className={`flex flex-col gap-6 flex-1 lg:justify-center items-center  ${idx % 2 ? 'lg:order-1' : 'lg:order-2'}`}>
                                         <h2 className='text-2xl w-full lg:text-left text-center lg:text-3xl font-black text-darkblue'>{item.title}</h2>
                                         <p className='text-base lg:text-lg text-darkblue text-center lg:text-left'>{item.description}</p>
                                     </div>

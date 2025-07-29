@@ -39,6 +39,7 @@ import {
   HearingTestsServiceView, HearingTestsFAQAdminForm,
   HearingTestsStepAdminForm, HearingTestsStepView, 
   HearingTestsTestominalAdminForm, HearingTestsTestominalView } from "@/components/pages/hearing-tests";
+import { FaqsFAQAdminForm, FaqsFAQView, FaqsFooterAdminForm, FaqsFooterView, FaqsHeaderAdminForm, FaqsHeaderView, FaqsHeroAdminForm, FaqsHeroView } from "@/components/pages/faqs";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -193,6 +194,24 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     footer: {
       View: HearingTestsFooterView,
       AdminForm: HearingTestsFooterAdminForm
+    }
+  },
+  faqs: {
+    header: {
+      View: FaqsHeaderView,
+      AdminForm: FaqsHeaderAdminForm
+    },
+    hero: {
+      View: FaqsHeroView,
+      AdminForm: FaqsHeroAdminForm
+    },
+    faq: {
+      View: FaqsFAQView,
+      AdminForm: FaqsFAQAdminForm
+    },
+    footer: {
+      View: FaqsFooterView,
+      AdminForm: FaqsFooterAdminForm
     }
   }
 };
