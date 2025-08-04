@@ -1,4 +1,4 @@
-interface KnowData {
+export interface KnowData {
     title: string;
     description: string;
 }

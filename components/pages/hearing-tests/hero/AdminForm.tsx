@@ -15,6 +15,7 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { HeroData } from './View';
+import { UploadDropzone } from '@/src/utils/uploadthing';
 
 interface HeroAdminFormProps {
   isOpen: boolean;
@@ -26,14 +27,14 @@ interface HeroAdminFormProps {
 export function HearingTestsHeroAdminForm({ isOpen, onClose, data, onSave }: HeroAdminFormProps) {
   const [formData, setFormData] = useState<HeroData>(data);
 
+  const handleChange = (field: keyof HeroData, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
     onClose();
-  };
-
-  const handleChange = (field: keyof HeroData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -41,9 +42,7 @@ export function HearingTestsHeroAdminForm({ isOpen, onClose, data, onSave }: Her
       <DrawerContent className="mx-auto h-screen max-w-2xl">
         <DrawerHeader>
           <DrawerTitle>Edit Hero Section</DrawerTitle>
-          <DrawerDescription>
-            Update the content for your hero section
-          </DrawerDescription>
+          <DrawerDescription>Update the content for your hero section</DrawerDescription>
         </DrawerHeader>
 
         <form onSubmit={handleSubmit} className="px-4 flex-1 flex flex-col" style={{ height: 'calc(100% - 150px)' }}>
@@ -70,13 +69,24 @@ export function HearingTestsHeroAdminForm({ isOpen, onClose, data, onSave }: Her
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="image">Background Image URL</Label>
-              <Input
-                id="image"
-                value={formData.image}
-                onChange={(e) => handleChange('image', e.target.value)}
-                placeholder="Enter image URL"
-                type="url"
+              <Label>Background Image</Label>
+              {formData.image?.url && (
+                <div className="mb-2">
+                  <img src={formData.image.url} alt="Current" className="w-full rounded-md" />
+                </div>
+              )}
+              <UploadDropzone
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  if (res && res.length > 0) {
+                    const { key, url } = res[0];
+                    handleChange('image', { key, url });
+                  }
+                }}
+                onUploadError={(err) => {
+                  console.error('Upload error:', err.message);
+                  alert('Image upload failed');
+                }}
               />
             </div>
 
@@ -90,7 +100,6 @@ export function HearingTestsHeroAdminForm({ isOpen, onClose, data, onSave }: Her
                   placeholder="Button text"
                 />
               </div>
-
               <div className="space-y-2">
                 <Label htmlFor="ctaLink">CTA Button Link</Label>
                 <Input
@@ -105,16 +114,16 @@ export function HearingTestsHeroAdminForm({ isOpen, onClose, data, onSave }: Her
 
           <DrawerFooter className="px-0 grid grid-cols-2">
             <div className="col-span-1">
-              <Button type="submit" className='w-full'>Save Changes</Button>
+              <Button type="submit" className="w-full">Save Changes</Button>
             </div>
             <div className="col-span-1">
-              <DrawerClose asChild className='w-full'>
+              <DrawerClose asChild className="w-full">
                 <Button variant="outline">Cancel</Button>
               </DrawerClose>
             </div>
           </DrawerFooter>
         </form>
       </DrawerContent>
-    </Drawer >
+    </Drawer>
   );
 }

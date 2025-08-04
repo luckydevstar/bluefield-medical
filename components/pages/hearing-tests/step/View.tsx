@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 
-interface StepData {
+export interface StepData {
     title: string;
     subtitle: string;
     briefs: string[];
