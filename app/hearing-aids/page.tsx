@@ -2,6 +2,8 @@ import { Suspense } from 'react';
 import { PageRenderer } from '@/components/PageRenderer';
 import { loadPageSections } from '@/lib/loadPageSections';
 
+export const dynamic = 'force-dynamic'; // 👈 disables caching
+
 async function HomePage() {
   const slist = ['header', 'hero', 'banner', 'showcase', 'testominal', 'discover', 'faq', 'footer'];
   const sections = await loadPageSections('hearing-aids', slist);
