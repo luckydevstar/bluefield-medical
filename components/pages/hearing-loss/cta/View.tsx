@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button"
 
-interface HearingLossCTAData {
+export interface HearingLossCTAData {
     label: "string",
     link: "string"
 }
 
-interface HearingLossCTAProps {
+export interface HearingLossCTAProps {
     data: HearingLossCTAData
 }
 

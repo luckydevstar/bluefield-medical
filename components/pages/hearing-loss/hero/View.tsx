@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 export interface HeroData {
   title: string;
   subtitle: string;
-  image: string;
+  image: {
+    key: string;
+    url: string;
+  };
   ctaText: string;
   ctaLink: string;
 }
@@ -19,7 +22,7 @@ export function HearingLossHeroView({ data }: HeroViewProps) {
       <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">
         <div className="absolute inset-0 z-0">
           <Image
-            src={data.image}
+            src={data.image.url}
             alt={data.title}
             fill
             className="object-cover"
