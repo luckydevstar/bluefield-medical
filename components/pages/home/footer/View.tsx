@@ -24,7 +24,7 @@ type QuestionItem = {
     phone: string
 }
 
-interface FooterData {
+export interface FooterData {
     logo: {
         key: string;
         url: string;

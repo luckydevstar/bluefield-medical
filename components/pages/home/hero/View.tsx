@@ -4,7 +4,10 @@ import { Button } from '@/components/ui/button';
 export interface HeroData {
   title: string;
   subtitle: string;
-  image: string;
+  image: {
+    key: string;
+    url: string;
+  };
   ctaText: string;
   ctaLink: string;
 }
@@ -18,7 +21,7 @@ export function HomeHeroView({ data }: HeroViewProps) {
     <section className="relative min-h-[660px] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src={data.image}
+          src={data.image.url}
           alt={data.title}
           fill
           className="object-cover"
