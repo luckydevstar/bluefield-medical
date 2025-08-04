@@ -1,60 +1,52 @@
 {
-    "title": "Get the latest hearing aids, fitted at home",
-    "titleDescription": "Get a free assessment with a hearing specialist to understand your type of hearing loss and the hearing aid styles available to you. Experience the luxury of expert hearing care at home with our mobile hearing clinic.",
-    "subtitle": "Recommended by an expert, selected by you",
-    "subtitleDescription": "During your hearing test, you’ll receive a personalized recommendation for the best hearing loss solutions, based on your lifestyle and hearing needs.",
-    "cta": {
-        "label": "Book your free hearing assessment",
-        "link": "/book-now"
+  "title": "Get the latest hearing aids, fitted at home",
+  "titleDescription": "Get a free assessment with a hearing specialist to understand your type of hearing loss and the hearing aid styles available to you. Experience the luxury of expert hearing care at home with our mobile hearing clinic.",
+  "subtitle": "Recommended by an expert, selected by you",
+  "subtitleDescription": "During your hearing test, you’ll receive a personalized recommendation for the best hearing loss solutions, based on your lifestyle and hearing needs.",
+  "cta": {
+    "label": "Book your free hearing assessment",
+    "link": "/book-now"
+  },
+  "showcases": [
+    {
+      "image": {
+        "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
+      },
+      "title": "Behind-the-ear (BTE) hearing aid",
+      "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
     },
-    "showcases": [
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        },
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        },
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        },
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        },
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        },
-        {
-            "image": {
-                "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
-                "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
-            },
-            "title": "Behind-the-ear (BTE) hearing aid",
-            "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
-        }
-    ]
+    {
+      "image": {
+        "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
+      },
+      "title": "Behind-the-ear (BTE) hearing aid",
+      "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
+    },
+    {
+      "image": {
+        "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
+      },
+      "title": "Behind-the-ear (BTE) hearing aid",
+      "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
+    },
+    {
+      "image": {
+        "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
+      },
+      "title": "Behind-the-ear (BTE) hearing aid",
+      "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
+    },
+    {
+      "image": {
+        "key": "2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q",
+        "url": "https://uikadw84rv.ufs.sh/f/2zcIufwhV9A8Cx4RLRqAVcRSYEPJMCBU5K3vTzIWhsxrZG9q"
+      },
+      "title": "Behind-the-ear (BTE) hearing aid",
+      "description": "Resting behind your outer ear, their bigger size makes them more visible — but easier to handle and clean. BTE hearing aids handle anything from mild to profound hearing loss and have the best battery life."
+    }
+  ]
 }
