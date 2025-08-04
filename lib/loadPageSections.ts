@@ -1,44 +1,60 @@
-import fs from 'fs';
-import path from 'path';
+import { createClient } from '@supabase/supabase-js';
 
 export interface PageSection {
   name: string;
   data: any;
 }
 
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
+);
+
 export async function loadPageSections(page: string, list: string[]): Promise<PageSection[]> {
-  const dataDir = path.join(process.cwd(), 'src', 'data', 'pages', page);
-
   try {
-    const files = list;
-    const sections: PageSection[] = [];
+    const { data, error } = await supabase
+      .from('page_sections')
+      .select('section_name, data')
+      .eq('page_name', page)
+      .in('section_name', list);
 
-    for (const file of files) {
-      const sectionName = file;
-      const filePath = path.join(dataDir, `${file}.json`);
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
-      const data = JSON.parse(fileContent);
-
-      sections.push({
-        name: sectionName,
-        data,
-      });
+    if (error) {
+      console.error(`Error loading sections for ${page}:`, error.message);
+      return [];
     }
 
-    return sections;
+    const sectionMap = new Map(data.map((item) => [item.section_name, item.data]));
+
+    // Preserve order of the original list
+    const sections = list
+      .map((sectionName) => {
+        const data = sectionMap.get(sectionName);
+        if (!data) return null;
+        return { name: sectionName, data };
+      })
+      .filter(Boolean); // Remove any missing sections if necessary
+
+    return sections as PageSection[];
   } catch (error) {
-    console.error(`Error loading sections for page ${page}:`, error);
+    console.error(`Unexpected error loading sections for ${page}:`, error);
     return [];
   }
 }
 
 export async function saveSectionData(page: string, section: string, data: any): Promise<void> {
-  const dataDir = path.join(process.cwd(), 'src', 'data', 'pages', page);
-  const filePath = path.join(dataDir, `${section}.json`);
+  try {
+    const { error } = await supabase
+      .from('page_sections')
+      .update({ page_name: page, section_name: section, data })
+      .eq('page_name', page)
+      .eq('section_name', section); // This is now valid
 
-  // Ensure directory exists
-  fs.mkdirSync(dataDir, { recursive: true });
-
-  // Write the updated data
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    if (error) {
+      console.error(`Failed to save section ${section} of page ${page}:`, error.message);
+      throw error;
+    }
+  } catch (error) {
+    console.error(`Unexpected error saving section ${section} of page ${page}:`, error);
+    throw error;
+  }
 }
