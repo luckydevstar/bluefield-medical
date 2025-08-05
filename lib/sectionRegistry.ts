@@ -52,6 +52,8 @@ import {
 } from "@/components/pages/faqs";
 
 import { 
+  PrivacyPolicyContentAdminForm,
+  PrivacyPolicyContentView,
   PrivacyPolicyFooterAdminForm, PrivacyPolicyFooterView, 
   PrivacyPolicyHeaderAdminForm, PrivacyPolicyHeaderView, 
   PrivacyPolicyHeroAdminForm, PrivacyPolicyHeroView 
@@ -259,8 +261,8 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
       AdminForm: PrivacyPolicyHeroAdminForm
     },
     content: {
-      View: PrivacyPolicyHeroView,
-      AdminForm: PrivacyPolicyHeroAdminForm
+      View: PrivacyPolicyContentView,
+      AdminForm: PrivacyPolicyContentAdminForm
     },
     footer: {
       View: PrivacyPolicyFooterView,
