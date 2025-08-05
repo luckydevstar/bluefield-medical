@@ -8,6 +8,8 @@ async function HomePage() {
   const slist = ['header', 'hero', 'footer'];
   const sections = await loadPageSections('book-now', slist);
 
+  console.log(">>>>>>>>>>>>", sections)
+
   return (
     <main className="min-h-screen">
       <Suspense fallback={<div>Loading...</div>}>
