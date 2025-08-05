@@ -19,6 +19,7 @@ import {
   HearingAidsShowcaseAdminForm,HearingAidsShowcaseView,
   HearingAidsTestominalAdminForm,HearingAidsTestominalView
 } from "@/components/pages/hearing-aids";
+
 import { 
   HearingLossBannerAdminForm, HearingLossBannerView, 
   HearingLossCTAAdminForm, HearingLossCTAView, 
@@ -28,7 +29,9 @@ import {
   HearingLossHeroAdminForm, HearingLossHeroView, 
   HearingLossServiceAdminForm, HearingLossServiceView, 
   HearingLossTestominalAdminForm, HearingLossTestominalView, 
-  HearingLossTrustAdminForm, HearingLossTrustView } from "@/components/pages/hearing-loss";
+  HearingLossTrustAdminForm, HearingLossTrustView 
+} from "@/components/pages/hearing-loss";
+
 import { 
   HearingTestsBannerAdminForm, HearingTestsBannerView, 
   HearingTestsFAQView, HearingTestsFooterAdminForm, 
@@ -38,8 +41,40 @@ import {
   HearingTestsKnowView, HearingTestsServiceAdminForm, 
   HearingTestsServiceView, HearingTestsFAQAdminForm,
   HearingTestsStepAdminForm, HearingTestsStepView, 
-  HearingTestsTestominalAdminForm, HearingTestsTestominalView } from "@/components/pages/hearing-tests";
-import { FaqsFAQAdminForm, FaqsFAQView, FaqsFooterAdminForm, FaqsFooterView, FaqsHeaderAdminForm, FaqsHeaderView, FaqsHeroAdminForm, FaqsHeroView } from "@/components/pages/faqs";
+  HearingTestsTestominalAdminForm, HearingTestsTestominalView 
+} from "@/components/pages/hearing-tests";
+
+import {
+  FaqsFAQAdminForm, FaqsFAQView, 
+  FaqsFooterAdminForm, FaqsFooterView, 
+  FaqsHeaderAdminForm, FaqsHeaderView, 
+  FaqsHeroAdminForm, FaqsHeroView 
+} from "@/components/pages/faqs";
+
+import { 
+  PrivacyPolicyFooterAdminForm, PrivacyPolicyFooterView, 
+  PrivacyPolicyHeaderAdminForm, PrivacyPolicyHeaderView, 
+  PrivacyPolicyHeroAdminForm, PrivacyPolicyHeroView 
+} from "@/components/pages/privacy-policy";
+
+import { 
+  AboutUsAboutAdminForm, AboutUsAboutView, 
+  AboutUsFooterAdminForm, AboutUsFooterView, 
+  AboutUsHeaderAdminForm, AboutUsHeaderView, 
+  AboutUsHeroAdminForm, AboutUsHeroView 
+} from "@/components/pages/about-us";
+
+import { 
+  BookNowFooterAdminForm, BookNowFooterView, 
+  BookNowHeaderAdminForm, BookNowHeaderView, 
+  BookNowHeroAdminForm, BookNowHeroView 
+} from "@/components/pages/book-now";
+
+import { 
+  ContactUsFooterAdminForm, ContactUsFooterView, 
+  ContactUsHeaderAdminForm, ContactUsHeaderView, 
+  ContactUsHeroAdminForm, ContactUsHeroView 
+} from "@/components/pages/contact-us";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -212,6 +247,70 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     footer: {
       View: FaqsFooterView,
       AdminForm: FaqsFooterAdminForm
+    }
+  },
+  "privacy-policy": {
+    header: {
+      View: PrivacyPolicyHeaderView,
+      AdminForm: PrivacyPolicyHeaderAdminForm
+    },
+    hero: {
+      View: PrivacyPolicyHeroView,
+      AdminForm: PrivacyPolicyHeroAdminForm
+    },
+    content: {
+      View: PrivacyPolicyHeroView,
+      AdminForm: PrivacyPolicyHeroAdminForm
+    },
+    footer: {
+      View: PrivacyPolicyFooterView,
+      AdminForm: PrivacyPolicyFooterAdminForm
+    }
+  },
+  "about-us": {
+    header: {
+      View: AboutUsHeaderView,
+      AdminForm: AboutUsHeaderAdminForm
+    },
+    hero: {
+      View: AboutUsHeroView,
+      AdminForm: AboutUsHeroAdminForm
+    },
+    about: {
+      View: AboutUsAboutView,
+      AdminForm: AboutUsAboutAdminForm
+    },
+    footer: {
+      View: AboutUsFooterView,
+      AdminForm: AboutUsFooterAdminForm
+    }
+  },
+  "book-now": {
+    header: {
+      View: BookNowHeaderView,
+      AdminForm: BookNowHeaderAdminForm
+    },
+    hero: {
+      View: BookNowHeroView,
+      AdminForm: BookNowHeroAdminForm
+    },
+    footer: {
+      View: BookNowFooterView,
+      AdminForm: BookNowFooterAdminForm
+    }
+  },
+  "contact-us": {
+    header: {
+      View: ContactUsHeaderView,
+      AdminForm: ContactUsHeaderAdminForm
+    },
+    hero: {
+      View: ContactUsHeroView,
+      AdminForm: ContactUsHeroAdminForm
+    },
+    footer: {
+      View: ContactUsFooterView,
+      AdminForm: ContactUsFooterAdminForm
     }
   }
 };

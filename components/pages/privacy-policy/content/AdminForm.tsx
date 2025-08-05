@@ -1,0 +1,5 @@
+export function PrivacyPolicyContentAdminForm() {
+    return (
+        <></>
+    )
+}
