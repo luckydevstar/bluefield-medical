@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 export interface HeroData {
   title: string;
   subtitle: string;
+  destination_email: string;
 }
 
 interface HeroViewProps {

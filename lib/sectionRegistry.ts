@@ -60,7 +60,7 @@ import {
 } from "@/components/pages/privacy-policy";
 
 import { 
-  AboutUsAboutAdminForm, AboutUsAboutView, 
+  AboutUsAdminForm, AboutUsAboutView, 
   AboutUsFooterAdminForm, AboutUsFooterView, 
   AboutUsHeaderAdminForm, AboutUsHeaderView, 
   AboutUsHeroAdminForm, AboutUsHeroView 
@@ -280,7 +280,7 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
     },
     about: {
       View: AboutUsAboutView,
-      AdminForm: AboutUsAboutAdminForm
+      AdminForm: AboutUsAdminForm
     },
     footer: {
       View: AboutUsFooterView,

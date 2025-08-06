@@ -4,12 +4,6 @@ type ServiceImage = {
     url: string;
 };
 
-type ServiceItem = {
-    title: string;
-    description: string;
-    image: ServiceImage;
-};
-
 type TeamMember = {
     name: string;
     role: string;

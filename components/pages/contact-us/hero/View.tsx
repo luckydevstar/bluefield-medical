@@ -9,6 +9,7 @@ export interface HeroData {
     key: string;
     url: string;
   };
+  destination_email: string;
 }
 
 interface HeroViewProps {
