@@ -80,3 +80,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+.leaf-left .leaf-item-1 {
+  order: 1;
+}
+
+.leaf-left .leaf-item-2 {
+  order: 2;
+}
+
+.leaf-right .leaf-item-1 {
+  order: 2;
+}
+
+.leaf-right .leaf-item-2 {
+  order: 1;
+}
+
+@media screen and (max-width: 960px) {
+  .leaf-right .leaf-item-1 {
+    order: 1;
+  }
+  
+  .leaf-right .leaf-item-2 {
+    order: 2;
+  }
+}

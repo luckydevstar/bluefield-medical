@@ -435,7 +435,7 @@ export function PrivacyPolicyContentView({ data }: PrivacyPolicyContentViewProps
                     <ul className="list-disc flex flex-col">
                         {
                             [
-                                "By phone number: 250.619.5746"
+                                `By phone number: ${data.by_phone_number}`
                             ].map((item, idx) => {
                                 return (
                                     <li className="ml-8" key={idx}><p>{item}</p></li>
