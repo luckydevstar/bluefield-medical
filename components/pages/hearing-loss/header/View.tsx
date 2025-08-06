@@ -64,7 +64,7 @@ export function HearingLossHeaderView({ data }: HeaderViewProps) {
                         </div>
 
                         <Button className='bg-lightblue hover:bg-lightblue rounded-full px-8 py-4' asChild>
-                            <Link href="/login" className='text-black hover:text-white font-lg'>BOOK ONLINE</Link>
+                            <Link href="/book-now" className='text-black hover:text-white font-lg'>BOOK ONLINE</Link>
                         </Button>
                     </div>
                 </nav>
