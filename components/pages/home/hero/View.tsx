@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export interface HeroData {
   title: string;
@@ -29,7 +30,7 @@ export function HomeHeroView({ data }: HeroViewProps) {
         />
         <div className="absolute inset-0 bg-black/40" />
       </div>
-      
+
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
         <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
           {data.title}
@@ -37,9 +38,11 @@ export function HomeHeroView({ data }: HeroViewProps) {
         <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
           {data.subtitle}
         </p>
-        <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
-          {data.ctaText}
-        </Button>
+        <Link href={data.ctaLink}>
+          <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
+            {data.ctaText}
+          </Button>
+        </Link>
       </div>
     </section>
   );

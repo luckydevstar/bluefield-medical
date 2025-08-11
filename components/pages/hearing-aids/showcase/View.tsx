@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Image = {
     key: string;
@@ -40,9 +41,11 @@ export function HearingAidsShowcaseView({ data }: HearingAidsShowcaseProps) {
                 <div className="flex flex-col gap-5 mt-12">
                     <h2 className="text-2xl lg:text-3xl font-black text-lightblue">{data.subtitle}</h2>
                     <div className="text-darkblue text-base">{data.subtitleDescription}</div>
-                    <Button size="lg" className="mt-8 mb-12 w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-lightblue text-white hover:text-darkblue">
-                        {data.cta.label}
-                    </Button>
+                    <Link href={data.cta.link}>
+                        <Button size="lg" className="mt-8 mb-12 w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-lightblue text-white hover:text-darkblue">
+                            {data.cta.label}
+                        </Button>
+                    </Link>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
                     {

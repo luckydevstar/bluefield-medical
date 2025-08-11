@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export interface StepData {
     title: string;
@@ -48,9 +49,11 @@ export function HearingTestsStepView({ data }: StepViewProps) {
                             })
                         }
                     </div>
-                    <Button size="lg" className="w-max text-base px-16 py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
-                        {data.cta.label}
-                    </Button>
+                    <Link href={data.cta.link}>
+                        <Button size="lg" className="w-max text-base px-16 py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
+                            {data.cta.label}
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </section>

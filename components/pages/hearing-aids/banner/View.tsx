@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type CTA = {
     label: string;
@@ -22,9 +23,11 @@ export function HearingAidsBannerView({ data }: HearingAidsBannerProps) {
                 <div className="flex w-full flex-col gap-6">
                     <h1 className="text-3xl font-bold text-darkblue">{data.title}</h1>
                     <p className="text-lg text-darkblue">{data.description}</p>
-                    <Button size="lg" className="w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-white text-white hover:text-darkblue">
-                        {data.cta.label}
-                    </Button>
+                    <Link href={data.cta.link}>
+                        <Button size="lg" className="w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-white text-white hover:text-darkblue">
+                            {data.cta.label}
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </section>
