@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 export interface HeroData {
   title: string;
@@ -63,10 +64,10 @@ export function ContactUsHeroView({ data }: HeroViewProps) {
                 </div>
               </div>
               <div className='flex flex-col gap-2 w-full'>
-                <Input required placeholder='Reason for Getting in Touch *' size={32} className='w-full h-9' id='reason' />
+                <Textarea required placeholder='Reason for Getting in Touch *' className='w-full h-9' id='reason' />
               </div>
               <div className='flex flex-col gap-2 w-full'>
-                <Input required placeholder='Message *' size={32} className='w-full h-9' id='message' />
+                <Textarea required placeholder='Message *' className='w-full h-9' id='message' />
               </div>
               <Button className='bg-darkblue px-8 py-6 text-white mt-4 rounded-full'>
                 SEND MESSAGE
