@@ -60,7 +60,7 @@ export function HomeStepsAdminForm({ isOpen, onClose, data, onSave }: HomeStepsA
       <DrawerContent className="mx-auto h-screen max-w-3xl">
         <DrawerHeader>
           <DrawerTitle>Edit Process Steps Section</DrawerTitle>
-          <DrawerDescription>Update title and each step's content and image</DrawerDescription>
+          <DrawerDescription>{`Update title and each step's content and image`}</DrawerDescription>
         </DrawerHeader>
 
         <form onSubmit={handleSubmit} className="px-4 flex-1 flex flex-col space-y-6 overflow-auto" style={{ height: 'calc(100% - 150px)' }}>

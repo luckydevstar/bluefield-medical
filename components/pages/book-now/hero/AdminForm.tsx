@@ -43,7 +43,7 @@ export function BookNowHeroAdminForm({ isOpen, onClose, data, onSave }: BookNowA
       <DrawerContent className="mx-auto h-screen max-w-2xl">
         <DrawerHeader>
           <DrawerTitle>Edit Book Now Hero Section</DrawerTitle>
-          <DrawerDescription>Update the content for the "Book Now" section on the homepage.</DrawerDescription>
+          <DrawerDescription>{`Update the content for the "Book Now" section on the homepage.`}</DrawerDescription>
         </DrawerHeader>
 
         <form onSubmit={handleSubmit} className="px-4 flex-1 flex flex-col space-y-6 overflow-auto" style={{ height: 'calc(100% - 150px)' }}>

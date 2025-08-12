@@ -44,7 +44,7 @@ export function ContactUsHeroAdminForm({ isOpen, onClose, data, onSave }: Contac
       <DrawerContent className="mx-auto h-screen max-w-2xl">
         <DrawerHeader>
           <DrawerTitle>Edit Contact Us Hero Section</DrawerTitle>
-          <DrawerDescription>Update the content for the "Contact Us" section.</DrawerDescription>
+          <DrawerDescription>{`Update the content for the "Contact Us" section.`}</DrawerDescription>
         </DrawerHeader>
 
         <form onSubmit={handleSubmit} className="px-4 flex-1 flex flex-col space-y-6 overflow-auto" style={{ height: 'calc(100% - 150px)' }}>

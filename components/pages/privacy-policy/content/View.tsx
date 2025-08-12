@@ -179,7 +179,7 @@ export function PrivacyPolicyContentView({ data }: PrivacyPolicyContentViewProps
                                                 }
                                             ].map((item, idx) => {
                                                 return (
-                                                    <li className="ml-8">
+                                                    <li className="ml-8" key={idx}>
                                                         <div className="flex flex-col gap-3" key={idx}>
                                                             <h4 className="text-base font-semibold">{item.title}</h4>
                                                             <span>Type: {item.type}</span>
