@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Editable Site Builder',
-  description: 'A powerful, modular website builder with inline editing capabilities',
+  title: 'Bluefield Medical',
+  description: 'Medical Services',
 };
 
 export default function RootLayout({
