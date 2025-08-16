@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { PageRenderer } from '@/components/PageRenderer';
 import { loadPageSections } from '@/lib/loadPageSections';
+import Loading from '@/components/common/loading';
 
 export const dynamic = 'force-dynamic'; // 👈 disables caching
 
@@ -10,7 +11,7 @@ async function HomePage() {
 
   return (
     <main className="min-h-screen">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loading />}>
         <PageRenderer page="faqs" sections={sections} />
       </Suspense>
     </main>
@@ -19,7 +20,7 @@ async function HomePage() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<Loading />}>
       <HomePage />
     </Suspense>
   );
