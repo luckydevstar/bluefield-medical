@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { toast } from "sonner"
 import { isEmail } from '@/src/utils/email';
+import { esc } from '@/src/utils/email';
 
 export interface HeroData {
   title: string;
@@ -26,14 +27,14 @@ export function ContactUsHeroView({ data }: HeroViewProps) {
   const [name, setName] = useState<string>("");
   const [phone, setPhone] = useState<string>("");
   const [reason, setReason] = useState<string>("");
-  
+
   const toEmail = data.destination_email ?? 'info@bluefields.uk';
-  
+
   const handleSubmit = async () => {
     if (!email || !name || !phone) {
       toast.info("You inputs are invalid.")
 
-      return ;
+      return;
     }
 
     if (!isEmail(email)) {
@@ -42,11 +43,43 @@ export function ContactUsHeroView({ data }: HeroViewProps) {
       return;
     }
 
-    const emailContent = `
-    <p>Contact Info: ${name}, ${email}, ${phone}</p>
-      <p>Reason: ${reason}</p>
-      <p>Message: ${content}</p>
-    `
+    const safeMessage = esc(content ?? '').replace(/\r?\n/g, '<br>');
+
+    const emailContent = `<!doctype html><html><body style="margin:0;background:#f6f9fc;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background:#f6f9fc;padding:24px 0;">
+        <tr>
+          <td align="center" style="padding:0 12px;">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="width:600px;max-width:600px;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">
+              <tr>
+                <td style="background:#111827;color:#ffffff;padding:18px 24px;font-weight:700;font-size:18px;">
+                  New contact message
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:24px;color:#111827;">
+                  <p style="margin:0 0 16px;font-size:16px;line-height:1.5;">You’ve received a new message from your website.</p>
+                  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border:1px solid #e5e7eb;border-radius:12px;">
+                    <tr>
+                      <td style="width:110px;color:#6b7280;font-size:13px;padding:10px 12px;border-bottom:1px solid #f3f4f6;">Contact</td>
+                      <td style="font-size:14px;padding:10px 12px;border-bottom:1px solid #f3f4f6;">${esc(name)}, <a href="mailto:${esc(email)}" style="color:#111827;text-decoration:underline;">${esc(email)}</a>${phone ? `, <a href="tel:${esc(phone)}" style="color:#111827;text-decoration:underline;">${esc(phone)}</a>` : ''}</td>
+                    </tr>
+                    <tr>
+                      <td style="width:110px;color:#6b7280;font-size:13px;padding:10px 12px;border-bottom:1px solid #f3f4f6;">Reason</td>
+                      <td style="font-size:14px;padding:10px 12px;border-bottom:1px solid #f3f4f6;">${esc(reason ?? '')}</td>
+                    </tr>
+                    <tr>
+                      <td style="width:110px;color:#6b7280;font-size:13px;padding:10px 12px;">Message</td>
+                      <td style="font-size:14px;padding:10px 12px;">${safeMessage}</td>
+                    </tr>
+                  </table>
+                  <p style="color:#6b7280;font-size:12px;margin-top:18px;">Sent via Bluefields “Contact Us” form.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body></html>`;
     const subject = `Contact request from ${name}`;
 
     const res = await fetch('/api/email', {
