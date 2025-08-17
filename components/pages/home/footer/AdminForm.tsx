@@ -89,6 +89,15 @@ export function HomeFooterAdminForm({ isOpen, onClose, data, onSave }: HomeFoote
             />
           </div>
 
+          <div className="space-y-2">
+            <Label>Company Address</Label>
+            <Input
+              value={formData.address}
+              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+              placeholder="Company Address"
+            />
+          </div>
+
           {/* Social Links */}
           <div className="space-y-2">
             <Label>Social Links</Label>

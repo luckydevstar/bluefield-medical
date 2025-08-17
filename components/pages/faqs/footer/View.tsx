@@ -30,6 +30,7 @@ export interface FooterData {
         url: string;
     };
     social: SocialITem[],
+    address: string;
     resources: LinkItem[],
     company: LinkItem[],
     questions: QuestionItem[]
@@ -61,10 +62,7 @@ export function FaqsFooterView({ data }: FooterViewProps) {
                             }
                         </div>
                         <p className='text-lightblue text-sm'>
-                            Head Office <br />
-                            Unit A - 6439 Portsmouth Rd <br />
-                            Nanaimo, BC <br />
-                            V9V 1R6
+                            {data.address}
                         </p>
                     </div>
                     <div className='flex flex-col gap-4 col-span-4 md:col-span-2 lg:col-span-1'>
