@@ -134,41 +134,7 @@ export function HearingAidsFooterAdminForm({ isOpen, onClose, data, onSave }: Ho
             </Button>
           </div>
 
-          {/* Questions */}
-          <div className="space-y-2">
-            <Label>Questions (Phone Contacts)</Label>
-            {formData.questions.map((item, index) => (
-              <div key={index} className="grid grid-cols-3 gap-4 mb-2">
-                <Input
-                  placeholder="Region or Label"
-                  value={item.name}
-                  onChange={(e) =>
-                    handleUpdateArray<typeof item>('questions', index, 'name', e.target.value)
-                  }
-                />
-                <Input
-                  placeholder="Phone"
-                  value={item.phone}
-                  onChange={(e) =>
-                    handleUpdateArray<typeof item>('questions', index, 'phone', e.target.value)
-                  }
-                />
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => handleRemoveItem('questions', index)}
-                >
-                  Remove
-                </Button>
-              </div>
-            ))}
-            <Button
-              type="button"
-              onClick={() => handleAddItem('questions', { name: '', phone: '' })}
-            >
-              Add Contact
-            </Button>
-          </div>
+          
 
           {/* Resources */}
           <div className="space-y-2">

@@ -53,11 +53,7 @@ export function HearingTestsFAQView({ data }: HearingTestsFAQViewProps) {
                         })
                     }
                 </Accordion>
-                <Link href={data.cta.link}>
-                    <Button size="lg" className="mt-8 text-base px-8 py-4 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
-                        {data.cta.label}
-                    </Button>
-                </Link>
+                
             </div>
         </section>
     );

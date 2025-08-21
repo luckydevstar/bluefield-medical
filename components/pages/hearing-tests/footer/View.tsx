@@ -44,8 +44,8 @@ export function HearingTestsFooterView({ data }: FooterViewProps) {
     return (
         <footer className="bg-darkblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                <div className='w-full grid grid-cols-4 gap-x-4 gap-y-12'>
-                    <div className='col-span-4 md:col-span-2 lg:col-span-1 flex flex-col gap-6'>
+                <div className='w-full grid grid-cols-3 gap-x-4 gap-y-12'>
+                    <div className='col-span-3 md:col-span-1 lg:col-span-1 flex flex-col gap-6'>
                         <Link href="/" className="-m-1.5 p-1.5">
                             <img src={data.logo.url} alt='logo' className='w-[150px] lg:w-[190px]' />
                         </Link>
@@ -65,22 +65,7 @@ export function HearingTestsFooterView({ data }: FooterViewProps) {
                             {data.address}
                         </p>
                     </div>
-                    <div className='flex flex-col gap-4 col-span-4 md:col-span-2 lg:col-span-1'>
-                        <h2 className='text-lg font-black text-lightblue'>QUESTIONS</h2>
-                        <div className='flex flex-col gap-3'>
-                            {
-                                data.questions.map((item, idx) => {
-                                    return (
-                                        <div className='flex flex-col gap-1 text-md text-white' key={idx}>
-                                            <span className='font-medium'>{item.name}</span>
-                                            <span>{item.phone}</span>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-                    <div className='flex flex-col gap-4 col-span-4 md:col-span-2 lg:col-span-1'>
+                    <div className='flex flex-col gap-4 col-span-3 md:col-span-1 lg:col-span-1'>
                         <h2 className='text-lg font-black text-lightblue'>RESOURCES</h2>
                         <div className='flex flex-col gap-3'>
                             {
@@ -94,7 +79,7 @@ export function HearingTestsFooterView({ data }: FooterViewProps) {
                             }
                         </div>
                     </div>
-                    <div className='flex flex-col gap-4 col-span-4 md:col-span-2 lg:col-span-1'>
+                    <div className='flex flex-col gap-4 col-span-3 md:col-span-1 lg:col-span-1'>
                         <h2 className='text-lg font-black text-lightblue'>COMPANY</h2>
                         <div className='flex flex-col gap-3'>
                             {
