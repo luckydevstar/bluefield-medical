@@ -25,7 +25,7 @@ export function HomeStepsView({ data }: HomeStepsViewProps) {
     return (
         <section className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
-                <h1 className="text-2xl md:text-3xl text-center font-semibold mb-10">{data.title}</h1>
+                <h1 className="text-lg md:text-xl text-center font-semibold mb-10">{data.title}</h1>
                 <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-6 gap-x-6'>
                 {
                     data.steps.map((item, idx) => {
