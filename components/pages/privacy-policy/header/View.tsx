@@ -30,7 +30,7 @@ export function PrivacyPolicyHeaderView({ data }: HeaderViewProps) {
 
     return (
         <>
-            <header className="sticky top-0 z-50 w-full bg-darkblue backdrop-blur supports-[backdrop-filter]:bg-darkblue">
+            <header className="sticky top-0 z-50 w-full bg-white backdrop-blur supports-[backdrop-filter]:bg-white">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
                         <Link href="/" className="-m-1.5 p-1.5">
@@ -45,7 +45,7 @@ export function PrivacyPolicyHeaderView({ data }: HeaderViewProps) {
                                 onClick={() => setMobileMenuOpen(true)}
                             >
                                 <span className="sr-only">Open main menu</span>
-                                <Menu className="h-6 w-6 text-white" aria-hidden="true" />
+                                <Menu className="h-6 w-6 text-darkblue" aria-hidden="true" />
                             </button>
                         </div>
 
@@ -55,7 +55,7 @@ export function PrivacyPolicyHeaderView({ data }: HeaderViewProps) {
                                     key={item.name}
                                     href={item.url}
                                     className={cn(
-                                        "text-sm font-semibold leading-6 transition-colors hover:text-lightblue text-white",
+                                        "text-sm font-semibold leading-6 transition-colors hover:text-lightblue text-darkblue",
                                     )}
                                 >
                                     {item.name}
