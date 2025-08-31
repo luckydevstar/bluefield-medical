@@ -19,9 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MaintenanceGate>
+        {/* <MaintenanceGate> */}
           {children}
-        </MaintenanceGate>
+        {/* </MaintenanceGate> */}
         <Toaster position="top-right" />
       </body>
     </html>
