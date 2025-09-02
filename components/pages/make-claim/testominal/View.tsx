@@ -1,16 +1,16 @@
-export interface HearingAidsTestimonialData {
+export interface HearingTestsTestimonialData {
     title: string;
     content: string;
     name: string;
     location: string;
 }
 
-interface HearingAidsTestominalProps {
-    data: HearingAidsTestimonialData
+interface HearingTestsTestominalProps {
+    data: HearingTestsTestimonialData
 }
 
 
-export function HearingAidsTestominalView({ data }: HearingAidsTestominalProps) {
+export function HearingTestsTestominalView({ data }: HearingTestsTestominalProps) {
     return (
         <section className="bg-darkblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">

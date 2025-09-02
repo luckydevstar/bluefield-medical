@@ -17,14 +17,14 @@ import { UploadDropzone } from '@/src/utils/uploadthing'; // adjust this path if
 import { Textarea } from '@/components/ui/textarea';
 import type { HeaderData } from './View';
 
-interface HomeHeaderAdminFormProps {
+interface HearingTestsHeaderAdminFormProps {
   isOpen: boolean;
   onClose: () => void;
   data: HeaderData;
   onSave: (data: HeaderData) => void;
 }
 
-export function HearingAidsHeaderAdminForm({ isOpen, onClose, data, onSave }: HomeHeaderAdminFormProps) {
+export function HearingTestsHeaderAdminForm({ isOpen, onClose, data, onSave }: HearingTestsHeaderAdminFormProps) {
   const [formData, setFormData] = useState<HeaderData>(data);
 
   const handleChange = (field: keyof HeaderData, value: any) => {

@@ -1,6 +1,26 @@
 "use client"
 
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+
+const ADMIN_NAV_LIST = [
+  {
+    label: "Location",
+    href: "/admin/booking-locations",
+  },
+  {
+    label: "Schedule",
+    href: "/admin"
+  },
+  {
+    label: "Bookings",
+    href: "/admin/bookings"
+  },
+  {
+    label: "Change Password",
+    href: "/admin/account"
+  }
+]
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,9 +28,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside className="col-span-12 md:col-span-3 lg:col-span-2 border-r p-4 space-y-2">
         <h2 className="font-semibold">Admin</h2>
         <nav className="flex flex-col gap-2">
-          <Link href="/admin">Schedule</Link>
-          <Link href="/admin/bookings">Bookings</Link>
-          <Link href="/admin/account">Account</Link>
+        {
+          ADMIN_NAV_LIST.map((item, idx) => {
+            return (
+              <Link href={item.href} className="">
+                <Button key={idx}>
+                  {item.label}
+                </Button>
+              </Link>
+            )
+          })
+        }
         </nav>
         <form
           action="/api/admin/login"

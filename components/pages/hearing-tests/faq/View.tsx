@@ -23,11 +23,11 @@ export interface FAQData {
     cta: FAQCallToAction;
 }
 
-interface HearingTestsFAQViewProps {
+interface HearingAidsFAQViewProps {
     data: FAQData
 }
 
-export function HearingTestsFAQView({ data }: HearingTestsFAQViewProps) {
+export function HearingAidsFAQView({ data }: HearingAidsFAQViewProps) {
     return (
         <section className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">

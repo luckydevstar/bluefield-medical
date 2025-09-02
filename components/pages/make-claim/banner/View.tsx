@@ -6,17 +6,17 @@ type CTA = {
     link: string;
 };
 
-export interface HearingAidsBannerData {
+export interface HearingTestsBannerData {
     title: string;
     description: string;
     cta: CTA;
 }
 
-interface HearingAidsBannerProps {
-    data: HearingAidsBannerData
+interface HearingTestsBannerProps {
+    data: HearingTestsBannerData
 }
 
-export function HearingAidsBannerView({ data }: HearingAidsBannerProps) {
+export function HearingTestsBannerView({ data }: HearingTestsBannerProps) {
     return (
         <section className="bg-lightblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">

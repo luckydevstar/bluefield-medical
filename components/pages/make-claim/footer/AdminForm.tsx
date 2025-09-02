@@ -16,14 +16,14 @@ import {
 import { UploadDropzone } from '@/src/utils/uploadthing'; // adjust path if needed
 import type { FooterData } from './View';
 
-interface HomeFooterAdminFormProps {
+interface HearingTestsFooterAdminFormProps {
   isOpen: boolean;
   onClose: () => void;
   data: FooterData;
   onSave: (data: FooterData) => void;
 }
 
-export function HearingAidsFooterAdminForm({ isOpen, onClose, data, onSave }: HomeFooterAdminFormProps) {
+export function HearingTestsFooterAdminForm({ isOpen, onClose, data, onSave }: HearingTestsFooterAdminFormProps) {
   const [formData, setFormData] = useState<FooterData>(data);
 
   const handleUpdateArray = <T,>(

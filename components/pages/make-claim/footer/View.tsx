@@ -40,7 +40,7 @@ interface FooterViewProps {
     data: FooterData;
 }
 
-export function HearingAidsFooterView({ data }: FooterViewProps) {
+export function HearingTestsFooterView({ data }: FooterViewProps) {
     return (
         <footer className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">

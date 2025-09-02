@@ -18,7 +18,7 @@ import {
   HearingAidsHeroAdminForm,HearingAidsHeroView,
   HearingAidsShowcaseAdminForm,HearingAidsShowcaseView,
   HearingAidsTestominalAdminForm,HearingAidsTestominalView
-} from "@/components/pages/hearing-aids";
+} from "@/components/pages/hearing-tests";
 
 import { 
   HearingLossBannerAdminForm, HearingLossBannerView, 
@@ -42,7 +42,7 @@ import {
   HearingTestsServiceView, HearingTestsFAQAdminForm,
   HearingTestsStepAdminForm, HearingTestsStepView, 
   HearingTestsTestominalAdminForm, HearingTestsTestominalView 
-} from "@/components/pages/hearing-tests";
+} from "@/components/pages/make-claim";
 
 import {
   FaqsFAQAdminForm, FaqsFAQView, 
@@ -125,7 +125,7 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
       AdminForm: HomeFooterAdminForm
     }
   },
-  "hearing-aids": {
+  "hearing-tests": {
     header: {
       View: HearingAidsHeaderView,
       AdminForm: HearingAidsHeaderAdminForm
@@ -197,7 +197,7 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
       AdminForm: HearingLossFooterAdminForm
     }
   },
-  "hearing-tests": {
+  "make-claim": {
     header: {
       View: HearingTestsHeaderView,
       AdminForm: HearingTestsHeaderAdminForm

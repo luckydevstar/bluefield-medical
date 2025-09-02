@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Menu, X} from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import cn from "classnames"
 import Link from 'next/link';
@@ -77,7 +77,7 @@ export function HomeHeaderView({ data }: HeaderViewProps) {
                     <div className="fixed inset-y-0 right-0 z-50 w-full bg-darkblue overflow-y-auto bg-background px-6 py-4 sm:max-w-sm sm:ring-1 sm:ring-border">
                         <div className="flex items-center justify-between">
                             <Link href="/" className="-m-1.5 p-1.5">
-                                <img src={data.logo.url} alt='logo' className='w-[150px] lg:w-[190px]' />
+                                <img src={'/logo_white.png'} alt='logo' className='w-[150px] lg:w-[190px]' />
                             </Link>
                             <button
                                 type="button"
