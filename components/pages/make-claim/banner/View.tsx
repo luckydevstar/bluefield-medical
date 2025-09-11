@@ -21,8 +21,8 @@ export function HearingTestsBannerView({ data }: HearingTestsBannerProps) {
         <section className="bg-lightblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">
                 <div className="flex w-full flex-col gap-6">
-                    <h1 className="text-3xl font-bold text-darkblue">{data.title}</h1>
-                    <p className="text-lg text-darkblue">{data.description}</p>
+                    <h1 className="text-xl md:text-3xl font-bold text-darkblue">{data.title}</h1>
+                    <p className="text-sm md:text-lg text-darkblue">{data.description}</p>
                     <Link href={data.cta.link}>
                         <Button size="lg" className="w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-white text-white hover:text-darkblue">
                             {data.cta.label}

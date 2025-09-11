@@ -32,7 +32,7 @@ export function HearingTestsHeroView({ data }: HeroViewProps) {
         </div>
 
         <div className="relative z-10 text-left text-white px-6 w-full">
-          <h1 className="text-2xl md:text-4xl font-bold mb-16 shadow-lg mx-12 leading-tight text-left">
+          <h1 className="text-2xl md:text-4xl font-bold mb-16 shadow-lg md:mx-12 leading-tight text-left">
             {data.title}
           </h1>
         </div>

@@ -24,9 +24,9 @@ export function HearingTestsStepView({ data }: StepViewProps) {
         <section className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-16 sm:py-20 lg:px-8">
                 <div className="flex flex-col gap-8">
-                    <h1 className="text-2xl lg:text-3xl font-bold text-darkblue">{data.title}</h1>
+                    <h1 className="text-xl md:text-2xl lg:text-3xl font-bold text-darkblue">{data.title}</h1>
                     <div className="flex flex-col gap-2">
-                        <p className="text-base lg:text-lg text-darkblue">{data.subtitle}</p>
+                        <p className="text-sm md:text-base lg:text-lg text-darkblue">{data.subtitle}</p>
                         <ul className="list-inside list-disc">
                             {
                                 data.briefs.map((item, idx) => {
@@ -43,14 +43,14 @@ export function HearingTestsStepView({ data }: StepViewProps) {
                                 return (
                                     <div className="flex flex-col gap-1" key={idx}>
                                         <h2 className="text-base lg:text-lg font-semibold">{item.title}</h2>
-                                        <p className="text-base lg:text-lg">{item.description}</p>
+                                        <p className="text-sm lg:text-lg">{item.description}</p>
                                     </div>
                                 )
                             })
                         }
                     </div>
                     <Link href={data.cta.link}>
-                        <Button size="lg" className="w-max text-base px-16 py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
+                        <Button size="lg" className="w-max text-sm md:text-base px-8 py-4 md:px-16 md:py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
                             {data.cta.label}
                         </Button>
                     </Link>
