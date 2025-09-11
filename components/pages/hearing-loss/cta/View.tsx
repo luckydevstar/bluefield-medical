@@ -14,7 +14,7 @@ export function HearingLossCTAView({ data }: HearingLossCTAProps) {
         <section className="bg-darkblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-8 sm:py-12 lg:px-8">
                 <div className="w-full flex items-center justify-center">
-                    <Button size="lg" className="w-max text-base px-16 py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
+                    <Button size="lg" className="w-max text-xs md:text-base px-8 py-4 md:px-16 md:py-8 rounded-full bg-lightblue hover:bg-lightblue text-white hover:text-white">
                         {data.label}
                     </Button>
                 </div>
