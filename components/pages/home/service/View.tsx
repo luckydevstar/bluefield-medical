@@ -34,7 +34,7 @@ export function HomeServiceView({ data }: HomeServiceViewProps) {
                                     className='flex flex-col lg:flex-row items-center gap-16'
                                 >
                                     <div 
-                                        className={`w-[475px] lg:order-${idx % 2 ? 2 : 1}`} 
+                                        className={`w-full md:w-[475px] lg:order-${idx % 2 ? 2 : 1}`} 
                                         key={idx}
                                     >
                                         <img src={item.image.url} className='object-contain h-auto' />

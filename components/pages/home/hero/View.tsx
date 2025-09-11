@@ -32,14 +32,14 @@ export function HomeHeroView({ data }: HeroViewProps) {
       </div>
 
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
-        <h1 className="text-3xl md:text-5xl font-bold mb-6 leading-tight">
+        <h1 className="text-xl md:text-5xl font-bold mb-4 md:mb-6 leading-tight">
           {data.title}
         </h1>
-        <p className="text-xl md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
+        <p className="text-sm font-bold md:font-medium md:text-2xl mb-8 opacity-90 max-w-2xl mx-auto">
           {data.subtitle}
         </p>
         <Link href={data.ctaLink}>
-          <Button size="lg" className="text-lg px-12 py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
+          <Button size="lg" className="text-sm md:text-lg px-6 py-3 md:px-12 md:py-6 rounded-full bg-lightblue hover:bg-lightblue text-darkblue hover:text-white">
             {data.ctaText}
           </Button>
         </Link>
