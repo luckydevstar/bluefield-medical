@@ -127,7 +127,7 @@ export function ContactUsHeroView({ data }: HeroViewProps) {
               {data.subtitle}
             </p>
           </div>
-          <div className='flex flex-col bg-white rounded-xl px-8 py-8 gap-6 min-w-[400px]'>
+          <div className='flex flex-col bg-white rounded-xl px-8 py-8 gap-3  md:gap-6 min-w-[400px]'>
             <h1 className='text-darkblue text-xl font-bold'>Get in Touch</h1>
             <div className='flex flex-col gap-4 max-w-lg w-full'>
               <div className='flex flex-col gap-2 w-full'>

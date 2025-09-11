@@ -115,24 +115,24 @@ export function BookNowHeroView({ data }: HeroViewProps) {
   return (
     <section className="relative min-h-[660px] overflow-hidden">
       <div className="mx-auto flex flex-col items-start max-w-7xl justify-between px-12 lg:px-16" aria-label="Global">
-        <div className='flex flex-col gap-10 py-20'>
+        <div className='flex flex-col gap-4 md:gap-10 py-10 md:py-20'>
           <h1 className='text-darkblue font-semibold text-2xl lg:text-4xl'>{data.title}</h1>
           <p className='text-darkblue text-lg'>{data.subtitle}</p>
         </div>
-        <div className='mb-20  flex flex-col gap-6 max-w-lg w-full'>
-          <div className='flex flex-col gap-4 w-full'>
+        <div className='mb-20  flex flex-col gap-3 md:gap-6 max-w-lg w-full'>
+          <div className='flex flex-col gap-2 md:gap-4 w-full'>
             <label className='text-darkblue font-semibold text-base' htmlFor='name'>Name *</label>
             <Input required className='w-full' id='name' value={name} onChange={e => setName(e.target.value)} />
           </div>
-          <div className='flex flex-col gap-4 w-full'>
+          <div className='flex flex-col gap-2 md:gap-4 w-full'>
             <label className='text-darkblue font-semibold text-base' htmlFor='email'>Email *</label>
             <Input required className='w-full' id='email' onChange={e => setEmail(e.target.value)} />
           </div>
-          <div className='flex flex-col gap-4 w-full'>
+          <div className='flex flex-col gap-2 md:gap-4 w-full'>
             <label className='text-darkblue font-semibold text-base' htmlFor='phone'>Phone *</label>
             <Input required className='w-full' id='phone' onChange={e => setPhone(e.target.value)} />
           </div>
-          <div className='flex flex-col gap-4 w-full'>
+          <div className='flex flex-col gap-2 md:gap-4 w-full'>
             <label className='text-darkblue font-semibold text-base' htmlFor='location'>Location *</label>
             <Input required className='w-full' id='location' onChange={e => setLocation(e.target.value)} />
           </div>
