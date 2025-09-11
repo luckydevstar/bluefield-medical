@@ -31,7 +31,7 @@ export function ContactUsHeaderView({ data }: HeaderViewProps) {
     return (
         <>
             <header className="sticky top-0 z-50 w-full bg-white backdrop-blur supports-[backdrop-filter]:bg-white">
-                <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-8" aria-label="Global">
+                <nav className="mx-auto flex max-w-7xl items-center justify-between px-2 lg:px-8" aria-label="Global">
                     <div className="flex lg:flex-1">
                         <Link href="/" className="-m-1.5 p-1.5">
                             <img src={data.logo.url} alt='logo' className='w-[120px] lg:w-[160px]' />
@@ -63,8 +63,8 @@ export function ContactUsHeaderView({ data }: HeaderViewProps) {
                             ))}
                         </div>
 
-                        <Button className='bg-lightblue hover:bg-lightblue rounded-full px-8 py-4' asChild>
-                            <Link href="/book-now" className='text-black hover:text-white font-lg'>BOOK ONLINE</Link>
+                        <Button className='bg-lightblue hover:bg-lightblue rounded-full px-4 py-2 md:px-8 md:py-4' asChild>
+                            <Link href="/book-now" className='text-black hover:text-white text-xs md:text-lg'>BOOK ONLINE</Link>
                         </Button>
                     </div>
                 </nav>
