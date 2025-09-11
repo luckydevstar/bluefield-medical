@@ -42,9 +42,9 @@ export function HearingAidsFAQView({ data }: HearingAidsFAQViewProps) {
                         data.faqs.map((item, idx) => {
                             return (
                                 <AccordionItem value={`item-${idx}`} key={idx}>
-                                    <AccordionTrigger className="text-darkblue hover:no-underline hover:text-lightblue text-lg font-bold">{item.title}</AccordionTrigger>
-                                    <AccordionContent className="flex flex-col gap-4 text-balance">
-                                        <p>
+                                    <AccordionTrigger className="text-darkblue hover:no-underline hover:text-lightblue text-left text-sm md:text-lg font-bold">{item.title}</AccordionTrigger>
+                                    <AccordionContent className="flex flex-col gap-4 text-sm text-balance">
+                                        <p className="text-sm">
                                             {item.description}
                                         </p>
                                     </AccordionContent>

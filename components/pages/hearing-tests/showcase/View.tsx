@@ -35,12 +35,12 @@ export function HearingAidsShowcaseView({ data }: HearingAidsShowcaseProps) {
         <section className="bg-white">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-12 sm:py-16 lg:px-8">
                 <div className="flex flex-col gap-5">
-                    <h1 className="text-3xl lg:text-4xl font-black text-darkblue">{data.title}</h1>
-                    <p className="text-darkblue text-base">{data.titleDescription}</p>
+                    <h1 className="text-xl md:text-3xl lg:text-4xl font-black text-darkblue">{data.title}</h1>
+                    <p className="text-sm text-darkblue md:text-base">{data.titleDescription}</p>
                 </div>
                 <div className="flex flex-col gap-5 mt-12">
-                    <h2 className="text-2xl lg:text-3xl font-black text-lightblue">{data.subtitle}</h2>
-                    <div className="text-darkblue text-base">{data.subtitleDescription}</div>
+                    <h2 className="text-lg md:text-xl lg:text-2xl font-black text-lightblue">{data.subtitle}</h2>
+                    <div className="text-sm text-darkblue md:text-base">{data.subtitleDescription}</div>
                     <Link href={data.cta.link}>
                         <Button size="lg" className="mt-8 mb-12 w-max text-base px-8 py-4 rounded-full bg-darkblue hover:bg-lightblue text-white hover:text-darkblue">
                             {data.cta.label}
@@ -56,8 +56,8 @@ export function HearingAidsShowcaseView({ data }: HearingAidsShowcaseProps) {
                                         <img src={item.image.url} alt={item.title} className="object-cover" />
                                     </div>
                                     <div className="w-full flex flex-col gap-4">
-                                        <h3 className="text-2xl font-bold text-darkblue">{item.title}</h3>
-                                        <p className="text-base text-slate-600">{item.description}</p>
+                                        <h3 className="text-lg md:text-2xl font-bold text-darkblue">{item.title}</h3>
+                                        <p className="text-sm md:text-base text-slate-600">{item.description}</p>
                                     </div>
                                 </div>
                             )

@@ -21,8 +21,8 @@ export function HearingAidsDiscoverView({ data }: HearingAidsDiscoverProps) {
         <section className="bg-lightblue">
             <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
                 <div className="flex w-full flex-col gap-6 items-center">
-                    <h1 className="text-3xl font-block text-darkblue text-center">{data.title}</h1>
-                    <p className="text-lg text-darkblue text-center">{data.subtitle}</p>
+                    <h1 className="text-xl md:text-3xl font-black text-darkblue text-center">{data.title}</h1>
+                    <p className="text-base md:text-lg text-darkblue text-center">{data.subtitle}</p>
                     <Link href={data.cta.link}>
                         <Button size="lg" className="text-base px-8 py-4 rounded-full bg-darkblue hover:bg-white text-white hover:text-darkblue">
                             {data.cta.label}
