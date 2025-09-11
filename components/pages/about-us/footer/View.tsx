@@ -43,7 +43,7 @@ interface FooterViewProps {
 export function AboutUsFooterView({ data }: FooterViewProps) {
     return (
         <footer className="bg-white">
-            <div className="mx-auto max-w-7xl overflow-hidden px-6 pb-20 sm:py-24 lg:px-8">
+            <div className="mx-auto max-w-7xl overflow-hidden px-6 py-20 sm:py-24 lg:px-8">
                 <div className='w-full grid grid-cols-3 gap-x-4 gap-y-12'>
                     <div className='col-span-3 md:col-span-1 lg:col-span-1 flex flex-col gap-6'>
                         <Link href="/" className="-m-1.5 p-1.5">
