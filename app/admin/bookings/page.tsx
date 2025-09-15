@@ -1,61 +1,52 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { toast } from 'sonner';
 
-type Row = {
-  booking_id:string; name:string; email:string; phone:string; attendees:number;
-  booking_status:'pending'|'confirmed'|'cancelled'|'reschedule_requested';
-  slot_start:string; slot_end:string; location_name:string; postcode:string
-};
-
-export default function AdminBookings() {
-  const [rows,setRows] = useState<Row[]>([]);
+export default function BookingsPage() {
+  const [items, setItems] = useState<any[]>([]);
   const load = async () => {
-    const res = await fetch('/api/bookings'); const j = await res.json(); setRows(j.data ?? []);
+    const res = await fetch('/api/admin/bookings', { cache: 'no-store' });
+    const json = await res.json();
+    setItems(json.bookings ?? []);
   };
-  useEffect(()=>{ load(); },[]);
+  useEffect(()=>{ load(); }, []);
 
-  const act = async (id:string, action:'cancel'|'reschedule') => {
-    const r = await fetch('/api/bookings', {
-      method:'PATCH', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ booking_id: id, action })
-    });
-    r.ok ? (toast.success('Done'), load()) : toast.error('Failed');
+  const cancel = async (id: string) => {
+    await fetch('/api/admin/bookings', { method: 'PATCH', body: JSON.stringify({ id, status: 'CANCELLED' }) });
+    await load();
   };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Bookings</h1>
+    <div className="bg-white p-4 rounded-md shadow">
+      <h3 className="font-semibold mb-3">Bookings</h3>
       <div className="overflow-x-auto">
-        <table className="min-w-[800px] w-full text-sm">
-          <thead>
-            <tr className="text-left border-b">
-              <th className="p-2">When</th><th className="p-2">Location</th><th className="p-2">Name</th>
-              <th className="p-2">Email</th><th className="p-2">Attendees</th><th className="p-2">Status</th><th className="p-2"></th>
-            </tr>
-          </thead>
+        <table className="w-full text-sm">
+          <thead><tr className="text-left">
+            <th className="p-2">Date/Time</th>
+            <th className="p-2">Org / Contact</th>
+            <th className="p-2">Email</th>
+            <th className="p-2">Attendees</th>
+            <th className="p-2">Status</th>
+            <th className="p-2"></th>
+          </tr></thead>
           <tbody>
-            {rows.map(r=>{
-              const when = `${new Date(r.slot_start).toLocaleString([], { dateStyle:'medium', timeStyle:'short' })}`;
-              return (
-                <tr key={r.booking_id} className="border-b">
-                  <td className="p-2">{when}</td>
-                  <td className="p-2">{r.location_name} ({r.postcode})</td>
-                  <td className="p-2">{r.name}</td>
-                  <td className="p-2">{r.email}</td>
-                  <td className="p-2">{r.attendees}</td>
-                  <td className="p-2">{r.booking_status}</td>
-                  <td className="p-2 flex gap-2">
-                    <Button size="sm" variant="secondary" onClick={()=>act(r.booking_id,'reschedule')}>Resched.</Button>
-                    <Button size="sm" variant="destructive" onClick={()=>act(r.booking_id,'cancel')}>Cancel</Button>
-                  </td>
-                </tr>
-              );
-            })}
+          {items.map((b)=>(
+            <tr key={b.id} className="border-t">
+              <td className="p-2">{new Date(b.slots.start_utc).toLocaleString()} – {new Date(b.slots.end_utc).toLocaleTimeString()}</td>
+              <td className="p-2">{b.org_name}<div className="text-xs text-gray-500">{b.contact_name}</div></td>
+              <td className="p-2">{b.email}</td>
+              <td className="p-2">{b.attendees}</td>
+              <td className="p-2">{b.status}</td>
+              <td className="p-2">
+                {b.status !== 'CANCELLED' && <button className="btn-primary" onClick={()=>cancel(b.id)}>Cancel</button>}
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
+      <style jsx global>{`
+        .btn-primary { @apply inline-flex items-center rounded bg-blue-600 text-white px-3 py-1 text-xs hover:bg-blue-700; }
+      `}</style>
     </div>
   );
 }
