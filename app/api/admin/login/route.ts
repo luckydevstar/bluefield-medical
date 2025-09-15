@@ -1,26 +1,28 @@
-import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { setAdminSession, clearAdminSession } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
+import bcrypt from "bcrypt";
+import { getSession } from "@/lib/session";
 
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
+export async function POST(req: NextRequest) {
+  const { username, password } = await req.json();
+  const { data: user } = await supabaseAdmin.from("admin_users").select("*").eq("username", username).single();
+  if (!user) return NextResponse.json({ error: "Invalid credentials" }, { status: 401 });
 
-  const { data, error } = await supabaseAdmin
-    .from('admin_users')
-    .select('id,email,password_hash')
-    .eq('email', email)
-    .maybeSingle();
+  const ok = await bcrypt.compare(password, user.password_hash);
+  if (!ok) return NextResponse.json({ error: "Invalid credentials" }, { status: 408 });
 
-  if (error || !data) return NextResponse.json({ ok: false, error: 'Invalid credentials' }, { status: 401 });
-  const ok = await bcrypt.compare(password, data.password_hash);
-  if (!ok) return NextResponse.json({ ok: false, error: 'Invalid credentials' }, { status: 401 });
-
-  await setAdminSession(email);
-  return NextResponse.json({ ok: true });
+  const res = NextResponse.json({ ok: true });
+  const session = await getSession();
+  session.adminId = user.id;
+  session.username = user.username;
+  await session.save();
+  return res;
 }
 
 export async function DELETE() {
-  await clearAdminSession();
-  return NextResponse.json({ ok: true });
+  const res = NextResponse.json({ ok: true });
+  const session = await getSession();
+  session.destroy();
+  await session.save();
+  return res;
 }
