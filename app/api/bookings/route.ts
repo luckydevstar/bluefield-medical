@@ -1,74 +1,77 @@
-// app/api/bookings/route.ts
+export const runtime = 'nodejs';
+
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import crypto from 'node:crypto';
 import { addMinutes } from 'date-fns';
-import { makeIcs } from '@/lib/ics';
-import { sendBookingEmail } from '@/lib/mail';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { slotId, orgName, contactName, email, phone, attendees } = body ?? {};
-  if (!slotId || !orgName || !contactName || !email || !attendees) {
-    return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+  try {
+    const { slotId, orgName, contactName, email, phone, attendees } = await req.json();
+
+    if (!slotId || !orgName || !contactName || !email || !attendees) {
+      return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
+    }
+
+    // (A) Atomically block the slot if it's OPEN
+    const { data: blocked, error: blockErr } = await supabaseAdmin
+      .from('slots')
+      .update({ status: 'BLOCKED' })
+      .eq('id', slotId)
+      .eq('status', 'OPEN')
+      .select('id,start_utc,end_utc')
+      .single();
+
+    if (blockErr || !blocked) {
+      return NextResponse.json({ error: 'Slot unavailable' }, { status: 409 });
+    }
+
+    // (B) Insert booking as PENDING with 10-minute hold window
+    const token = crypto.randomBytes(24).toString('hex');
+    const holdUntil = addMinutes(new Date(), 10);
+
+    const { data: booking, error: insErr } = await supabaseAdmin
+      .from('bookings')
+      .insert({
+        slot_id: slotId,
+        org_name: orgName,
+        contact_name: contactName,
+        email,
+        phone,
+        attendees: Number(attendees),
+        status: 'PENDING',
+        confirmation_token: token,
+        hold_expires_at: holdUntil.toISOString(),
+      })
+      .select('id')
+      .single();
+
+    if (insErr) {
+      // Revert slot if booking insert fails
+      await supabaseAdmin.from('slots').update({ status: 'OPEN' }).eq('id', slotId);
+      return NextResponse.json({ error: insErr.message }, { status: 409 });
+    }
+
+    // (C) Send "Confirm your booking" email (no ICS here)
+    const origin = new URL(req.url).origin;
+    const confirmUrl = `${origin}/api/bookings/confirm?token=${encodeURIComponent(token)}`;
+
+    await fetch(`${origin}/api/email`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({
+        to: email,
+        subject: 'Confirm your Bluefield booking',
+        html: `<p>Hi ${contactName},</p>
+               <p>Please <a href="${confirmUrl}">confirm your booking</a> within <b>10 minutes</b>.</p>`,
+      }),
+    });
+
+    return NextResponse.json({
+      bookingId: booking.id,
+      holdExpiresAt: holdUntil.toISOString(),
+    });
+  } catch (e: any) {
+    return NextResponse.json({ error: e?.message || 'Failed to create booking' }, { status: 500 });
   }
-
-  // fetch slot
-  const { data: slot, error: slotErr } = await supabaseAdmin
-    .from('slots').select('*').eq('id', slotId).single();
-  if (slotErr || !slot) return NextResponse.json({ error: 'Slot not found' }, { status: 404 });
-  if (slot.status !== 'OPEN') return NextResponse.json({ error: 'Slot unavailable' }, { status: 409 });
-
-  // check active booking/hold
-  const { data: existing } = await supabaseAdmin
-    .from('bookings')
-    .select('id,status,hold_expires_at')
-    .eq('slot_id', slotId);
-
-  const now = new Date();
-  const hasActive = (existing ?? []).some(b =>
-    b.status === 'CONFIRMED' ||
-    (b.status === 'PENDING' && b.hold_expires_at && new Date(b.hold_expires_at) > now)
-  );
-  if (hasActive) return NextResponse.json({ error: 'Slot already reserved' }, { status: 409 });
-
-  const token = crypto.randomBytes(24).toString('hex');
-  const holdUntil = addMinutes(now, 10);
-
-  // insert booking (unique on slot_id guarantees no double-book)
-  const { data: booking, error: insErr } = await supabaseAdmin
-    .from('bookings')
-    .insert({
-      slot_id: slotId,
-      org_name: orgName,
-      contact_name: contactName,
-      email,
-      phone,
-      attendees,
-      status: 'PENDING',
-      confirmation_token: token,
-      hold_expires_at: holdUntil,
-    })
-    .select('*')
-    .single();
-
-  if (insErr) return NextResponse.json({ error: insErr.message }, { status: 409 });
-
-  // send email (stub)
-  const confirmUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/api/bookings/confirm?token=${token}`;
-  const ics = makeIcs({
-    title: 'Bluefield Appointment',
-    description: `Booking for ${orgName}. Confirm here: ${confirmUrl}`,
-    startUtc: new Date(slot.start_utc),
-    endUtc: new Date(slot.end_utc),
-  });
-
-  await sendBookingEmail({
-    to: email,
-    subject: 'Confirm your Bluefield booking',
-    html: `<p>Thanks ${contactName}! Please <a href="${confirmUrl}">confirm your booking</a> within 10 minutes.</p>`,
-    icsContent: ics,
-  });
-
-  return NextResponse.json({ bookingId: booking.id, holdExpiresAt: holdUntil.toISOString() });
 }
