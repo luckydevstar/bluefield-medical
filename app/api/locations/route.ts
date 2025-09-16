@@ -11,6 +11,7 @@ export async function GET(req: NextRequest) {
   const { data: locations, error } = await supabaseAdmin
     .from('locations')
     .select('*');
+
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
   if (!postcode) return NextResponse.json({ locations });

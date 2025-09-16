@@ -1,140 +1,408 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
+import {
+  Card, CardContent, CardHeader, CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Textarea } from '@/components/ui/textarea'; // if you decide to add notes later
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
+import {
+  CalendarDays, Clock, Loader2, MapPin, Search, CheckCircle2, AlertCircle,
+} from 'lucide-react';
 
-type Location = { id:string; name:string; postcode?:string };
-type ServiceDay = { id:string; location_id:string; service_date:string; window_start:string; window_end:string; slot_length_minutes:number };
-type Slot = { id:string; start_utc:string; end_utc:string };
+type Location = { id: string; name: string; postcode?: string | null };
+type ServiceDay = {
+  id: string;
+  location_id: string;
+  service_date: string;
+  window_start: string;
+  window_end: string;
+  slot_length_minutes: number;
+};
+type Slot = { id: string; start_utc: string; end_utc: string };
 
 export default function BookingPage() {
-  const [postcode, setPostcode] = useState('');
-  const [locations, setLocations] = useState<Location[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<string>('');
-  const [serviceDays, setServiceDays] = useState<ServiceDay[]>([]);
-  const [selectedServiceDay, setSelectedServiceDay] = useState<string>('');
-  const [slots, setSlots] = useState<Slot[]>([]);
-  const [form, setForm] = useState({ orgName:'', contactName:'', email:'', phone:'', attendees:1, slotId:'' });
-  const [status, setStatus] = useState<string | null>(null);
+  const { toast } = useToast();
+  const sp = useSearchParams();
 
-  useEffect(()=>{
-    const url = new URL(window.location.href);
-    const s = url.searchParams.get('status');
-    if (s) setStatus(s);
-  },[]);
+  const [postcode, setPostcode] = React.useState('');
+  const [locations, setLocations] = React.useState<Location[]>([]);
+  const [selectedLocation, setSelectedLocation] = React.useState<string>('');
+
+  const [serviceDays, setServiceDays] = React.useState<ServiceDay[]>([]);
+  const [selectedServiceDay, setSelectedServiceDay] = React.useState<string>('');
+
+  const [slots, setSlots] = React.useState<Slot[]>([]);
+
+  const [loadingSearch, setLoadingSearch] = React.useState(false);
+  const [loadingDays, setLoadingDays] = React.useState(false);
+  const [loadingSlots, setLoadingSlots] = React.useState(false);
+  const [submitting, setSubmitting] = React.useState(false);
+
+  const [form, setForm] = React.useState({
+    orgName: '',
+    contactName: '',
+    email: '',
+    phone: '',
+    attendees: 1,
+    slotId: '',
+  });
+
+  // show status from /api/bookings/confirm redirect
+  const status = sp.get('status');
+
+  React.useEffect(() => {
+    if (!status) return;
+    if (status === 'success') {
+      toast({ title: 'Booking confirmed', description: 'Thanks — your appointment is set.' });
+    } else if (status === 'expired') {
+      toast({
+        title: 'Confirmation expired',
+        description: 'Please pick a slot and reserve again.',
+        variant: 'destructive',
+      });
+    } else if (status === 'invalid') {
+      toast({
+        title: 'Invalid link',
+        description: 'The confirmation link was invalid. Try reserving again.',
+        variant: 'destructive',
+      });
+    }
+  }, [status, toast]);
+
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatRange = (s: string, e: string) => `${formatTime(s)} – ${formatTime(e)}`;
+
+  const resetAfterSearch = () => {
+    setSelectedLocation('');
+    setServiceDays([]);
+    setSelectedServiceDay('');
+    setSlots([]);
+    setForm((f) => ({ ...f, slotId: '' }));
+  };
 
   const search = async () => {
-    const res = await fetch(`/api/locations?postcode=${encodeURIComponent(postcode)}&radiusKm=50`, { cache: 'no-store' });
-    const json = await res.json();
-    setLocations(json.locations ?? []);
-    setSelectedLocation('');
-    setServiceDays([]); setSelectedServiceDay(''); setSlots([]);
+    if (!postcode.trim()) {
+      toast({ title: 'Postcode required', variant: 'destructive' });
+      return;
+    }
+    setLoadingSearch(true);
+    try {
+      const res = await fetch(
+        `/api/locations?postcode=${encodeURIComponent(postcode.trim())}&radiusKm=50`,
+        { cache: 'no-store' }
+      );
+      const json = await res.json();
+      setLocations(json.locations ?? []);
+      resetAfterSearch();
+      if (!json.locations || json.locations.length === 0) {
+        toast({ title: 'No locations found', description: 'Try a different postcode or radius.' });
+      }
+    } catch (e: any) {
+      toast({ title: 'Search failed', description: e?.message ?? 'Please try again.', variant: 'destructive' });
+    } finally {
+      setLoadingSearch(false);
+    }
   };
 
   const loadDays = async (locationId: string) => {
     setSelectedLocation(locationId);
-    const today = new Date().toISOString().slice(0,10);
-    const res = await fetch(`/api/service-days?locationId=${locationId}&from=${today}`, { cache: 'no-store' });
-    const json = await res.json();
-    setServiceDays(json.serviceDays ?? []);
-    setSelectedServiceDay('');
-    setSlots([]);
+    setLoadingDays(true);
+    try {
+      const today = new Date().toISOString().slice(0, 10);
+      const res = await fetch(
+        `/api/service-days?locationId=${locationId}&from=${today}`,
+        { cache: 'no-store' }
+      );
+      const json = await res.json();
+      setServiceDays(json.serviceDays ?? []);
+      setSelectedServiceDay('');
+      setSlots([]);
+      setForm((f) => ({ ...f, slotId: '' }));
+    } catch (e: any) {
+      toast({ title: 'Failed to load dates', description: e?.message ?? 'Try again.', variant: 'destructive' });
+    } finally {
+      setLoadingDays(false);
+    }
   };
 
   const loadSlots = async (serviceDayId: string) => {
     setSelectedServiceDay(serviceDayId);
-    const res = await fetch(`/api/slots?serviceDayId=${serviceDayId}`, { cache: 'no-store' });
-    const json = await res.json();
-    setSlots(json.slots ?? []);
+    setLoadingSlots(true);
+    try {
+      const res = await fetch(`/api/slots?serviceDayId=${serviceDayId}`, { cache: 'no-store' });
+      const json = await res.json();
+      setSlots(json.slots ?? []);
+      setForm((f) => ({ ...f, slotId: '' }));
+      if (!json.slots || json.slots.length === 0) {
+        toast({ title: 'No available slots', description: 'Please choose another date.' });
+      }
+    } catch (e: any) {
+      toast({ title: 'Failed to load slots', description: e?.message ?? 'Try again.', variant: 'destructive' });
+    } finally {
+      setLoadingSlots(false);
+    }
+  };
+
+  const validate = () => {
+    if (!form.slotId) {
+      toast({ title: 'Pick a time slot', variant: 'destructive' });
+      return false;
+    }
+    if (!form.orgName.trim() || !form.contactName.trim() || !form.email.trim()) {
+      toast({ title: 'Missing details', description: 'Organisation, contact name, and email are required.', variant: 'destructive' });
+      return false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      toast({ title: 'Invalid email', description: 'Enter a valid email address.', variant: 'destructive' });
+      return false;
+    }
+    if (form.attendees < 1 || form.attendees > 500) {
+      toast({ title: 'Attendees out of range', description: 'Enter between 1 and 500.', variant: 'destructive' });
+      return false;
+    }
+    return true;
   };
 
   const reserve = async (e: React.FormEvent) => {
     e.preventDefault();
-    const payload = { ...form, attendees: Number(form.attendees) };
-    const res = await fetch('/api/bookings', { method: 'POST', body: JSON.stringify(payload) });
-    const json = await res.json();
-    if (res.ok) {
-      alert('Check your email to confirm within 10 minutes.');
-    } else {
-      alert(json.error ?? 'Failed to reserve');
+    if (!validate()) return;
+
+    setSubmitting(true);
+    try {
+      const payload = { ...form, attendees: Number(form.attendees) };
+      const res = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? 'Failed to reserve');
+
+      toast({
+        title: 'Reservation created',
+        description: 'Check your email to confirm within 10 minutes.',
+      });
+      // Optional: reset the personal details but keep search context
+      setForm((f) => ({ ...f, orgName: '', contactName: '', email: '', phone: '', attendees: 1, slotId: '' }));
+    } catch (err: any) {
+      toast({ title: 'Reservation failed', description: err?.message ?? 'Please try again.', variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="mx-auto max-w-4xl p-4 space-y-6">
-      <h1 className="text-2xl font-semibold">Book a Bluefield Appointment</h1>
-
-      {status === 'success' && <div className="rounded bg-green-50 border border-green-200 p-3 text-green-800">✅ Booking confirmed!</div>}
-      {status === 'expired' && <div className="rounded bg-yellow-50 border border-yellow-200 p-3 text-yellow-800">⏰ Confirmation window expired. Please book again.</div>}
-      {status === 'invalid' && <div className="rounded bg-red-50 border border-red-200 p-3 text-red-800">❌ Invalid confirmation link.</div>}
-
-      <div className="bg-white rounded shadow p-4 space-y-3">
-        <label className="block text-sm font-medium">Your Postcode</label>
-        <div className="flex gap-2">
-          <input className="input flex-1" value={postcode} onChange={e=>setPostcode(e.target.value)} placeholder="e.g., SW1A 1AA"/>
-          <button className="btn-primary" onClick={search}>Search</button>
-        </div>
-        {locations.length > 0 && (
-          <>
-            <label className="block text-sm font-medium mt-4">Choose Location</label>
-            <select className="input" value={selectedLocation} onChange={e=>loadDays(e.target.value)}>
-              <option value="">Select...</option>
-              {locations.map(l=> <option key={l.id} value={l.id}>{l.name}</option>)}
-            </select>
-          </>
-        )}
-
-        {serviceDays.length > 0 && (
-          <>
-            <label className="block text-sm font-medium mt-4">Choose Date</label>
-            <select className="input" value={selectedServiceDay} onChange={e=>loadSlots(e.target.value)}>
-              <option value="">Select...</option>
-              {serviceDays.map(sd=> (
-                <option key={sd.id} value={sd.id}>
-                  {sd.service_date} ({sd.window_start}–{sd.window_end})
-                </option>
-              ))}
-            </select>
-          </>
-        )}
-
-        {slots.length > 0 && (
-          <>
-            <label className="block text-sm font-medium mt-4">Available Time Slots</label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {slots.map(s=>(
-                <button key={s.id}
-                        onClick={()=>setForm({...form, slotId: s.id})}
-                        className={`rounded border px-3 py-2 text-sm text-left hover:bg-blue-50 ${form.slotId===s.id?'border-blue-600 bg-blue-50':'border-gray-300'}`}>
-                  {new Date(s.start_utc).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
-                  {' – '}
-                  {new Date(s.end_utc).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}
-                </button>
-              ))}
-            </div>
-          </>
-        )}
+    <div className="mx-auto max-w-5xl p-4 md:p-6 space-y-6">
+      <div className="flex items-center gap-2">
+        <MapPin className="h-5 w-5" />
+        <h1 className="text-2xl font-semibold">Book a Bluefield Appointment</h1>
       </div>
 
-      <form onSubmit={reserve} className="bg-white rounded shadow p-4 grid gap-3">
-        <h2 className="text-lg font-semibold">Your Details</h2>
-        <input className="input" placeholder="Organisation" value={form.orgName} onChange={e=>setForm({...form, orgName:e.target.value})}/>
-        <div className="grid md:grid-cols-2 gap-3">
-          <input className="input" placeholder="Contact name" value={form.contactName} onChange={e=>setForm({...form, contactName:e.target.value})}/>
-          <input className="input" placeholder="Email" type="email" value={form.email} onChange={e=>setForm({...form, email:e.target.value})}/>
-        </div>
-        <div className="grid md:grid-cols-2 gap-3">
-          <input className="input" placeholder="Phone (optional)" value={form.phone} onChange={e=>setForm({...form, phone:e.target.value})}/>
-          <input className="input" type="number" min={1} max={500} placeholder="Attendees" value={form.attendees}
-                 onChange={e=>setForm({...form, attendees:Number(e.target.value)})}/>
-        </div>
-        <button className="btn-primary justify-self-start" disabled={!form.slotId}>Reserve Slot</button>
-        {!form.slotId && <p className="text-xs text-gray-500">Pick a time slot first.</p>}
-      </form>
+      {/* Status banner (also echoed via toasts) */}
+      {status && (
+        <Alert className={status === 'success' ? 'border-green-600/50' : 'border-amber-500/50'}>
+          <AlertDescription className="flex items-center gap-2">
+            {status === 'success' && <CheckCircle2 className="h-4 w-4 text-green-600" />}
+            {status !== 'success' && <AlertCircle className="h-4 w-4 text-amber-600" />}
+            {status === 'success' ? 'Booking confirmed!' :
+             status === 'expired' ? 'Confirmation expired. Please book again.' :
+             'Invalid confirmation link.'}
+          </AlertDescription>
+        </Alert>
+      )}
 
-      <style jsx global>{`
-        .input { @apply w-full rounded border px-3 py-2 text-sm; }
-        .btn-primary { @apply inline-flex items-center rounded bg-blue-600 text-white px-4 py-2 text-sm hover:bg-blue-700 disabled:opacity-50; }
-      `}</style>
+      {/* Step 1: Find a location */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Search className="h-5 w-5 text-muted-foreground" />
+            Find a location near you
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+            <div className="grid gap-2">
+              <Label htmlFor="postcode">Your postcode</Label>
+              <Input
+                id="postcode"
+                placeholder="e.g., SW1A 1AA"
+                value={postcode}
+                onChange={(e) => setPostcode(e.target.value)}
+                disabled={loadingSearch}
+              />
+            </div>
+            <div className="flex items-end">
+              <Button onClick={search} disabled={loadingSearch}>
+                {loadingSearch && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Search
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-2 sm:grid-cols-2">
+            <div className="grid gap-2">
+              <Label>Choose location</Label>
+              <Select
+                value={selectedLocation}
+                onValueChange={(v) => loadDays(v)}
+                disabled={locations.length === 0 || loadingDays || loadingSearch}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={locations.length ? 'Select a location' : 'Search to load locations'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((l) => (
+                    <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>Choose date</Label>
+              <Select
+                value={selectedServiceDay}
+                onValueChange={(v) => loadSlots(v)}
+                disabled={!selectedLocation || loadingSlots || loadingDays}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder={serviceDays.length ? 'Select a date' : 'Pick a location first'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {serviceDays.map((sd) => (
+                    <SelectItem key={sd.id} value={sd.id}>
+                      <div className="flex items-center gap-2">
+                        <CalendarDays className="h-4 w-4 text-muted-foreground" />
+                        <span>{sd.service_date}</span>
+                        <span className="text-muted-foreground">({sd.window_start}–{sd.window_end})</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Slots */}
+          <div className="grid gap-2">
+            <Label>Available time slots</Label>
+            {loadingSlots ? (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" /> Loading slots…
+              </div>
+            ) : slots.length === 0 ? (
+              <p className="text-sm text-muted-foreground">No slots to show.</p>
+            ) : (
+              <RadioGroup
+                value={form.slotId}
+                onValueChange={(v) => setForm((f) => ({ ...f, slotId: v }))}
+                className="grid grid-cols-2 md:grid-cols-3 gap-2"
+              >
+                {slots.map((s) => (
+                  <label
+                    key={s.id}
+                    className="flex cursor-pointer items-center gap-2 rounded-md border p-2 hover:bg-accent"
+                  >
+                    <RadioGroupItem value={s.id} />
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{formatRange(s.start_utc, s.end_utc)}</span>
+                  </label>
+                ))}
+              </RadioGroup>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step 2: Your details */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Your details</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={reserve} className="grid gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="orgName">Organisation</Label>
+              <Input
+                id="orgName"
+                value={form.orgName}
+                onChange={(e) => setForm((f) => ({ ...f, orgName: e.target.value }))}
+                placeholder="Your organisation"
+              />
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2">
+              <div className="grid gap-2">
+                <Label htmlFor="contactName">Contact name</Label>
+                <Input
+                  id="contactName"
+                  value={form.contactName}
+                  onChange={(e) => setForm((f) => ({ ...f, contactName: e.target.value }))}
+                  placeholder="Full name"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={form.email}
+                  onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                  placeholder="name@company.com"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2 md:grid-cols-2">
+              <div className="grid gap-2">
+                <Label htmlFor="phone">Phone (optional)</Label>
+                <Input
+                  id="phone"
+                  value={form.phone}
+                  onChange={(e) => setForm((f) => ({ ...f, phone: e.target.value }))}
+                  placeholder="+44 ..."
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="attendees">Attendees</Label>
+                <Input
+                  id="attendees"
+                  type="number"
+                  min={1}
+                  max={500}
+                  value={form.attendees}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, attendees: Number(e.target.value) || 1 }))
+                  }
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button type="submit" disabled={!form.slotId || submitting}>
+                {submitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Reserve slot
+              </Button>
+              {!form.slotId && (
+                <span className="text-xs text-muted-foreground">Pick a time slot first.</span>
+              )}
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+
+      <p className="text-xs text-muted-foreground">
+        After you reserve, you’ll receive a confirmation link by email. The slot is held for 10 minutes.
+      </p>
     </div>
   );
 }
