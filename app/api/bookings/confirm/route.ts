@@ -97,7 +97,7 @@ export async function GET(req: NextRequest) {
         location: locationLine,
         uid: `booking-${booking.id}@bluefield`,
         sequence: 0,
-        organizerEmail: process.env.MAIL_FROM,
+        organizerEmail: process.env.BOOKINGS_FROM_EMAIL,
       });
 
       await fetch(`${origin}/api/email`, {

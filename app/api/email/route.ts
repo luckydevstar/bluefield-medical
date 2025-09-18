@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     // Accept multiple common keys so you don't have to change the client much:
     const body = await req.json();
     const to: string = body.to;
-    const from: string = body.from ?? process.env.MAIL_FROM ?? '';
+    const from: string = body.from ?? process.env.BOOKINGS_FROM_EMAIL ?? '';
     const subject: string = body.subject ?? 'Message';
     // Prefer messageHtml/html/message as the HTML source
     const html: string = body.messageHtml ?? body.html ?? body.message ?? '';
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     const resp = await ses.send(cmd);
     return NextResponse.json({ ok: true, messageId: resp.MessageId });
   } catch (err: any) {
-    console.error('SES send failed:', err);
+    console.log('SES send failed:', err);
     return NextResponse.json(
       { error: err?.message ?? 'Send failed' },
       { status: 500 }

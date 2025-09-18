@@ -1,6 +1,6 @@
 'use client';
 
-export function BookVehicleHeroAdminForm() {
+export function BookVehicleAdminForm() {
   return (
     <></>
   );

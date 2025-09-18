@@ -76,7 +76,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
           location: locationLine,
           uid: `booking-${booking.id}@bluefield`,
           sequence: 0,
-          organizerEmail: process.env.MAIL_FROM,
+          organizerEmail: process.env.BOOKINGS_FROM_EMAIL,
         });
 
         await fetch(`${origin}/api/email`, {

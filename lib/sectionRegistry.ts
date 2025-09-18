@@ -77,8 +77,14 @@ import {
   ContactUsHeaderAdminForm, ContactUsHeaderView, 
   ContactUsHeroAdminForm, ContactUsHeroView 
 } from "@/components/pages/contact-us";
-import { BookVehicleFooterAdminForm, BookVehicleFooterView, BookVehicleHeaderAdminForm, BookVehicleHeaderView, BookVehicleHeroAdminForm } from "@/components/pages/book-vehicle";
-import BookVehicleHeroView from "@/components/pages/book-vehicle/hero/View";
+import { 
+  BookVehicleFooterAdminForm, 
+  BookVehicleFooterView, 
+  BookVehicleHeaderAdminForm, 
+  BookVehicleHeaderView, 
+  BookVehicleAdminForm,
+  BookingVehicleView 
+} from "@/components/pages/book-vehicle";
 
 export interface SectionComponent {
   View: React.ComponentType<{ data: any }>;
@@ -309,8 +315,8 @@ export const sectionRegistry: Record<string, Record<string, SectionComponent>> =
       AdminForm: BookVehicleHeaderAdminForm
     },
     hero: {
-      View: BookVehicleHeroView,
-      AdminForm: BookVehicleHeroAdminForm
+      View: BookingVehicleView,
+      AdminForm: BookVehicleAdminForm
     },
     footer: {
       View: BookVehicleFooterView,

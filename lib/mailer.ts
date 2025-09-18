@@ -18,7 +18,7 @@ export async function sendBookingEmail(mail: Mail) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: process.env.MAIL_FROM || 'noreply@yourdomain.com',
+        from: process.env.BOOKINGS_FROM_EMAIL || 'noreply@yourdomain.com',
         to: mail.to,
         subject: mail.subject,
         html: mail.html,

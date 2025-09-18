@@ -96,7 +96,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
           location: locationLine,
           uid: `booking-${b.id}@bluefield`,
           sequence: 1, // bump if rescheduling same UID again
-          organizerEmail: process.env.MAIL_FROM,
+          organizerEmail: process.env.BOOKINGS_FROM_EMAIL,
         });
 
         await fetch(`${origin}/api/email`, {
