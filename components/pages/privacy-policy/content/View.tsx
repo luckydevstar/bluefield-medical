@@ -20,7 +20,7 @@ const sections = [
   { id: 'consent', title: '9. Consent' },
 ];
 
-export default function PrivacyPolicyView() {
+export default function PrivacyPolicyContentView() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top bar / breadcrumb */}
