@@ -90,7 +90,7 @@ export default function AdminShell({
     router.replace('/admin/login');
   };
 
-  const gotoChangePassword = () => router.push('/admin/account');
+  const gotoChangePassword = () => router.push('/admin/change-password');
 
   const initials = (username ?? 'Admin')
     .split(' ')

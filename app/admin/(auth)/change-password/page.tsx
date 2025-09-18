@@ -139,13 +139,6 @@ export default function ChangePasswordPage() {
                   {showNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
-
-              <div className="space-y-1">
-                <Progress value={strength} />
-                <p className="text-xs text-muted-foreground">
-                  Include upper & lower case letters, numbers, and symbols for stronger security.
-                </p>
-              </div>
             </div>
 
             {/* Confirm */}
