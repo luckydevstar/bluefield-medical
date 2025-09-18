@@ -1,7 +1,5 @@
-const PrivacyPolicyContentAdminForm = () => {
+export function PrivacyPolicyContentAdminForm() {
     return (
         <></>
     )
 }
-
-export default PrivacyPolicyContentAdminForm;

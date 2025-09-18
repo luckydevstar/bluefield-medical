@@ -51,7 +51,7 @@ import {
   FaqsHeroAdminForm, FaqsHeroView 
 } from "@/components/pages/faqs";
 
-import { 
+import {
   PrivacyPolicyContentAdminForm,
   PrivacyPolicyContentView,
   PrivacyPolicyFooterAdminForm, PrivacyPolicyFooterView, 
