@@ -4,6 +4,7 @@ import { SectionWrapper } from '@/components/common/SectionWrapper';
 import { getSectionComponent } from '@/lib/sectionRegistry';
 import { useSectionEditor } from '@/hooks/useSectionEditor';
 import { PageSection } from '@/lib/loadPageSections';
+import { Fragment } from 'react';
 
 interface PageRendererProps {
   page: string;
@@ -25,7 +26,7 @@ export function PageRenderer({ page, sections }: PageRendererProps) {
         const { View, AdminForm } = component;
 
         return (
-          <div key={section.name}>
+          <Fragment key={section.name}>
             <SectionWrapper
               page={page}
               section={section.name}
@@ -34,7 +35,7 @@ export function PageRenderer({ page, sections }: PageRendererProps) {
             >
               <View data={section.data} />
             </SectionWrapper>
-          </div>
+          </Fragment>
         );
       })}
 
