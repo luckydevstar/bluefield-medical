@@ -54,6 +54,9 @@ export async function POST(req: NextRequest) {
     });
 
     const resp = await ses.send(cmd);
+
+    console.log(">>>>>EMAIL", resp)
+
     return NextResponse.json({ ok: true, messageId: resp.MessageId });
   } catch (err: any) {
     console.log('SES send failed:', err);

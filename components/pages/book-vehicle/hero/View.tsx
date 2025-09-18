@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea'; // if you decide to add notes later
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import {
   CalendarDays, Clock, Loader2, MapPin, Search, CheckCircle2, AlertCircle,
 } from 'lucide-react';
@@ -78,8 +78,6 @@ export function BookingVehicleView() {
   }
   React.useEffect(() => { loadAvailable(); }, []);
 
-
-  const { toast } = useToast();
   const sp = useSearchParams();
 
   const [postcode, setPostcode] = React.useState('');
@@ -111,19 +109,11 @@ export function BookingVehicleView() {
   React.useEffect(() => {
     if (!status) return;
     if (status === 'success') {
-      toast({ title: 'Booking confirmed', description: 'Thanks — your appointment is set.' });
+      toast('Booking confirmed, Thanks — your appointment is set.');
     } else if (status === 'expired') {
-      toast({
-        title: 'Confirmation expired',
-        description: 'Please pick a slot and reserve again.',
-        variant: 'destructive',
-      });
+      toast('Confirmation expired. Please pick a slot and reserve again.');
     } else if (status === 'invalid') {
-      toast({
-        title: 'Invalid link',
-        description: 'The confirmation link was invalid. Try reserving again.',
-        variant: 'destructive',
-      });
+      toast('Invalid link. The confirmation link was invalid. Try reserving again.');
     }
   }, [status, toast]);
 
@@ -155,7 +145,7 @@ export function BookingVehicleView() {
 
   const search = async () => {
     if (!postcode.trim()) {
-      toast({ title: 'Postcode required', variant: 'destructive' });
+      toast('Postcode required');
       return;
     }
     setLoadingSearch(true);
@@ -168,10 +158,10 @@ export function BookingVehicleView() {
       setLocations(json.locations ?? []);
       resetAfterSearch();
       if (!json.locations || json.locations.length === 0) {
-        toast({ title: 'No locations found', description: 'Try a different postcode or radius.' });
+        toast('No locations found. Try a different postcode or radius.');
       }
     } catch (e: any) {
-      toast({ title: 'Search failed', description: e?.message ?? 'Please try again.', variant: 'destructive' });
+      toast('Search failed. Please try again.');
     } finally {
       setLoadingSearch(false);
     }
@@ -192,7 +182,7 @@ export function BookingVehicleView() {
       setSlots([]);
       setForm((f) => ({ ...f, slotId: '' }));
     } catch (e: any) {
-      toast({ title: 'Failed to load dates', description: e?.message ?? 'Try again.', variant: 'destructive' });
+      toast('Failed to load dates. Try again.');
     } finally {
       setLoadingDays(false);
     }
@@ -207,10 +197,10 @@ export function BookingVehicleView() {
       setSlots(json.slots ?? []);
       setForm((f) => ({ ...f, slotId: '' }));
       if (!json.slots || json.slots.length === 0) {
-        toast({ title: 'No available slots', description: 'Please choose another date.' });
+        toast('No available slots. Please choose another date.');
       }
     } catch (e: any) {
-      toast({ title: 'Failed to load slots', description: e?.message ?? 'Try again.', variant: 'destructive' });
+      toast('Failed to load slots. Try again.');
     } finally {
       setLoadingSlots(false);
     }
@@ -218,19 +208,19 @@ export function BookingVehicleView() {
 
   const validate = () => {
     if (!form.slotId) {
-      toast({ title: 'Pick a time slot', variant: 'destructive' });
+      toast('Pick a time slot');
       return false;
     }
     if (!form.orgName.trim() || !form.contactName.trim() || !form.email.trim()) {
-      toast({ title: 'Missing details', description: 'Organisation, contact name, and email are required.', variant: 'destructive' });
+      toast('Missing details. Organisation, contact name, and email are required.');
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      toast({ title: 'Invalid email', description: 'Enter a valid email address.', variant: 'destructive' });
+      toast('Invalid email. Enter a valid email address.');
       return false;
     }
     if (form.attendees < 1 || form.attendees > 500) {
-      toast({ title: 'Attendees out of range', description: 'Enter between 1 and 500.', variant: 'destructive' });
+      toast('Attendees out of range. Enter between 1 and 500.');
       return false;
     }
     return true;
@@ -251,14 +241,11 @@ export function BookingVehicleView() {
       const json = await res.json();
       if (!res.ok) throw new Error(json.error ?? 'Failed to reserve');
 
-      toast({
-        title: 'Reservation created',
-        description: 'Check your email to confirm within 10 minutes.',
-      });
+      toast('Reservation created. Check your email to confirm within 10 minutes.');
       // Optional: reset the personal details but keep search context
       setForm((f) => ({ ...f, orgName: '', contactName: '', email: '', phone: '', attendees: 1, slotId: '' }));
     } catch (err: any) {
-      toast({ title: 'Reservation failed', description: err?.message ?? 'Please try again.', variant: 'destructive' });
+      toast('Reservation failed. Please try again.');
     } finally {
       setSubmitting(false);
     }
