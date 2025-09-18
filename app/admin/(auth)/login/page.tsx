@@ -44,10 +44,15 @@ export default function AdminLoginPage() {
         body: JSON.stringify({ username: username.trim(), password }),
       });
 
-      console.log(res.ok)
-
-      if (!res.ok) {
+      if (res.status === 408) {
         const j = await res.json().catch(() => ({}));
+
+        toast({
+          title: 'Login failed',
+          description: 'Please check your username/password.',
+          variant: 'destructive',
+        })
+
         throw new Error(j.error || 'Invalid credentials');
       }
 

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Plus, RefreshCcw, MapPin, Trash2 } from 'lucide-react';
+import { Plus, RefreshCcw, Trash2 } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,6 +14,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+
+// ⬇️ NEW: postcode autocomplete
+import PostcodeAutocomplete from '@/components/admin/PostcodeAutocomplete';
 
 type Location = {
   id: string;
@@ -108,6 +111,22 @@ export default function LocationsPage() {
     }
   };
 
+  // If user types a postcode and doesn’t pick from the list, try to resolve on blur
+  const resolvePostcodeOnBlur = async () => {
+    const pc = form.postcode.trim();
+    if (!pc) return;
+    try {
+      const r = await fetch(`/api/uk-postcodes?q=${encodeURIComponent(pc)}`, { cache: 'no-store' });
+      const j = await r.json();
+      const exact = (j.results ?? []).find((x: any) => String(x.postcode).toUpperCase() === pc.toUpperCase());
+      if (exact) {
+        setForm((f) => ({ ...f, postcode: exact.postcode, lat: String(exact.lat), lng: String(exact.lng) }));
+      }
+    } catch {
+      /* noop */
+    }
+  };
+
   const filtered = React.useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return items;
@@ -137,7 +156,7 @@ export default function LocationsPage() {
             Refresh
           </Button>
 
-          <Dialog open={open} onOpenChange={setOpen}>
+          <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="mr-2 h-4 w-4" />
@@ -148,6 +167,7 @@ export default function LocationsPage() {
               <DialogHeader>
                 <DialogTitle>Add a new location</DialogTitle>
               </DialogHeader>
+
               <form onSubmit={submit} className="grid gap-4 pt-2">
                 <div className="grid gap-2">
                   <Label htmlFor="name">Name</Label>
@@ -159,6 +179,7 @@ export default function LocationsPage() {
                     placeholder="e.g., London Clinic"
                   />
                 </div>
+
                 <div className="grid gap-2">
                   <Label htmlFor="address">Address</Label>
                   <Input
@@ -168,15 +189,23 @@ export default function LocationsPage() {
                     placeholder="123 Street, City"
                   />
                 </div>
+
+                {/* ⬇️ REPLACED: Postcode input -> Autocomplete with auto-fill lat/lng */}
                 <div className="grid gap-2">
-                  <Label htmlFor="postcode">Postcode</Label>
-                  <Input
-                    id="postcode"
+                  <Label>Postcode</Label>
+                  <PostcodeAutocomplete
                     value={form.postcode}
-                    onChange={(e) => setForm((f) => ({ ...f, postcode: e.target.value }))}
-                    placeholder="SW1A 1AA"
+                    onChange={(text) => {
+                      setForm((f) => ({ ...f, postcode: text, lat: '', lng: '' })); // clear coords until a suggestion is picked
+                    }}
+                    onSelect={(s) => {
+                      setForm((f) => ({ ...f, postcode: s.postcode, lat: String(s.lat), lng: String(s.lng) }));
+                    }}
+                    placeholder="Start typing (e.g., SW1A 1AA)…"
                   />
+                  <p className="text-xs text-muted-foreground">Pick a suggestion to auto-fill coordinates. If you type manually, we’ll try to resolve on blur.</p>
                 </div>
+
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="grid gap-2">
                     <Label htmlFor="lat">Latitude</Label>
@@ -185,7 +214,8 @@ export default function LocationsPage() {
                       inputMode="decimal"
                       value={form.lat}
                       onChange={(e) => setForm((f) => ({ ...f, lat: e.target.value }))}
-                      placeholder="51.5014"
+                      onBlur={resolvePostcodeOnBlur}
+                      placeholder="auto-filled"
                     />
                   </div>
                   <div className="grid gap-2">
@@ -195,7 +225,8 @@ export default function LocationsPage() {
                       inputMode="decimal"
                       value={form.lng}
                       onChange={(e) => setForm((f) => ({ ...f, lng: e.target.value }))}
-                      placeholder="-0.1419"
+                      onBlur={resolvePostcodeOnBlur}
+                      placeholder="auto-filled"
                     />
                   </div>
                 </div>
@@ -209,6 +240,7 @@ export default function LocationsPage() {
                   </Button>
                 </div>
               </form>
+
               <Separator />
               <div className="text-xs text-muted-foreground">
                 Tip: You can leave coordinates empty now and update later.
@@ -254,7 +286,9 @@ export default function LocationsPage() {
                       <TableCell>{l.postcode || '—'}</TableCell>
                       <TableCell className="text-right">
                         {l.lat != null && l.lng != null ? (
-                          <code className="rounded bg-muted px-2 py-1 text-xs">{l.lat.toFixed(5)}, {l.lng.toFixed(5)}</code>
+                          <code className="rounded bg-muted px-2 py-1 text-xs">
+                            {l.lat.toFixed(5)}, {l.lng.toFixed(5)}
+                          </code>
                         ) : '—'}
                       </TableCell>
                       <TableCell className="text-right">
