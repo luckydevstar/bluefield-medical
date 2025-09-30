@@ -382,7 +382,7 @@ export default function LocationsPage() {
               </Button>
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-[720px]">
+            <DialogContent className="sm:max-w-[720px] max-h-full overflow-auto">
               <DialogHeader>
                 <DialogTitle>
                   {step === 1 ? 'Add a new location' : `Add service days for “${createdLocation?.name ?? ''}”`}
@@ -431,31 +431,6 @@ export default function LocationsPage() {
                     </p>
                   </div>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="grid gap-2">
-                      <Label htmlFor="lat">Latitude</Label>
-                      <Input
-                        id="lat"
-                        inputMode="decimal"
-                        value={form.lat}
-                        onChange={(e) => setForm((f) => ({ ...f, lat: e.target.value }))}
-                        onBlur={resolvePostcodeOnBlur}
-                        placeholder="auto-filled"
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <Label htmlFor="lng">Longitude</Label>
-                      <Input
-                        id="lng"
-                        inputMode="decimal"
-                        value={form.lng}
-                        onChange={(e) => setForm((f) => ({ ...f, lng: e.target.value }))}
-                        onBlur={resolvePostcodeOnBlur}
-                        placeholder="auto-filled"
-                      />
-                    </div>
-                  </div>
-
                   <div className="flex items-center justify-between pt-2">
                     <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                       Cancel
@@ -481,8 +456,8 @@ export default function LocationsPage() {
 
                   <div className="space-y-3">
                     {rows.map((row, idx) => (
-                      <div key={row.key} className="rounded-md border p-3">
-                        <div className="mb-2 flex items-center justify-between">
+                      <div key={row.key} className="rounded-md border p-3 flex flex-col gap-3">
+                        <div className="-mb-2 flex items-center justify-between">
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <CalendarClock className="h-4 w-4" />
                             Day {idx + 1}
@@ -558,10 +533,6 @@ export default function LocationsPage() {
                         Add another day
                       </Button>
                       <div className="flex items-center gap-2">
-                        <Button variant="outline" onClick={() => setStep(1)}>
-                          <ArrowLeft className="mr-2 h-4 w-4" />
-                          Back
-                        </Button>
                         <Button onClick={saveDaysAndClose} disabled={savingDays}>
                           Save & finish
                         </Button>
@@ -672,7 +643,6 @@ export default function LocationsPage() {
                     <TableHead className="w-[26%]">Name</TableHead>
                     <TableHead className="w-[34%]">Address</TableHead>
                     <TableHead className="w-[18%]">Postcode</TableHead>
-                    <TableHead className="w-[16%] text-right">Coordinates</TableHead>
                     <TableHead className="w-[6%]" />
                   </TableRow>
                 </TableHeader>
@@ -682,13 +652,6 @@ export default function LocationsPage() {
                       <TableCell className="font-medium">{l.name}</TableCell>
                       <TableCell className="text-muted-foreground">{l.address || '—'}</TableCell>
                       <TableCell>{l.postcode || '—'}</TableCell>
-                      <TableCell className="text-right">
-                        {l.lat != null && l.lng != null ? (
-                          <code className="rounded bg-muted px-2 py-1 text-xs">
-                            {l.lat.toFixed(5)}, {l.lng.toFixed(5)}
-                          </code>
-                        ) : '—'}
-                      </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-1">
                           <Button

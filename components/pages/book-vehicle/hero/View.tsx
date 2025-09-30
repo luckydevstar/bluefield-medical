@@ -17,6 +17,7 @@ import {
   CalendarDays, Clock, Loader2, MapPin, Search, CheckCircle2, AlertCircle,
 } from 'lucide-react';
 import LocationsMap from '@/components/common/LocationsMap';
+import PostcodeAutocomplete from '@/components/admin/PostcodeAutocomplete';
 
 type Location = { id: string; name: string; postcode?: string | null };
 type ServiceDay = {
@@ -143,15 +144,17 @@ export function BookingVehicleView() {
     setForm((f) => ({ ...f, slotId: '' }));
   };
 
-  const search = async () => {
-    if (!postcode.trim()) {
+  // replace existing search()
+  const search = async (overridePc?: string) => {
+    const q = (overridePc ?? postcode).trim();
+    if (!q) {
       toast('Postcode required');
       return;
     }
     setLoadingSearch(true);
     try {
       const res = await fetch(
-        `/api/locations?postcode=${encodeURIComponent(postcode.trim())}&radiusKm=50`,
+        `/api/locations?postcode=${encodeURIComponent(q)}&radiusKm=50`,
         { cache: 'no-store' }
       );
       const json = await res.json();
@@ -160,7 +163,7 @@ export function BookingVehicleView() {
       if (!json.locations || json.locations.length === 0) {
         toast('No locations found. Try a different postcode or radius.');
       }
-    } catch (e: any) {
+    } catch {
       toast('Search failed. Please try again.');
     } finally {
       setLoadingSearch(false);
@@ -298,19 +301,26 @@ export function BookingVehicleView() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
+          <div className="grid gap-2 sm:grid-cols-[1fr_auto] items-center">
             <div className="grid gap-2">
               <Label htmlFor="postcode">Your postcode</Label>
-              <Input
-                id="postcode"
-                placeholder="e.g., SW1A 1AA"
+              <PostcodeAutocomplete
                 value={postcode}
-                onChange={(e) => setPostcode(e.target.value)}
-                disabled={loadingSearch}
+                onChange={(text) => setPostcode(text)}
+                onSelect={(s) => {
+                  // s: { postcode: string; lat: number; lng: number }
+                  setPostcode(s.postcode);
+                  // auto-run the search when a suggestion is picked
+                  search(s.postcode);
+                }}
+                placeholder="Start typing (e.g., SW1A 1AA)…"
               />
+              <p className="text-xs text-muted-foreground">
+                Tip: choose a suggestion to search automatically.
+              </p>
             </div>
             <div className="flex items-end">
-              <Button onClick={search} disabled={loadingSearch}>
+              <Button onClick={() => search()} disabled={loadingSearch}>
                 {loadingSearch && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Search
               </Button>
