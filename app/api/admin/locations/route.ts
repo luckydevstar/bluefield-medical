@@ -3,7 +3,34 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { requireAdmin } from '@/lib/requireAdmin';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const q = searchParams.get('q');
+  const id = searchParams.get('id');
+  const limit = Number(searchParams.get('limit') ?? '0');
+
+  // by id
+  if (id) {
+    const { data, error } = await supabaseAdmin.from('locations').select('*').eq('id', id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ locations: data });
+  }
+
+  // typeahead
+  if (q) {
+    const like = `%${q}%`;
+    let builder = supabaseAdmin
+      .from('locations')
+      .select('*')
+      .or(`name.ilike.${like},address.ilike.${like},postcode.ilike.${like}`)
+      .order('name', { ascending: true });
+    if (!Number.isNaN(limit) && limit > 0) builder = builder.limit(limit);
+    const { data, error } = await builder;
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ locations: data });
+  }
+
+  // default (all)
   const { data, error } = await supabaseAdmin.from('locations').select('*').order('name');
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ locations: data });

@@ -24,6 +24,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 // postcode autocomplete
 import PostcodeAutocomplete from '@/components/admin/PostcodeAutocomplete';
+import LocationCombobox from '@/components/admin/LocationCombobox';
 
 type Location = {
   id: string;
@@ -37,10 +38,11 @@ type Location = {
 
 type NewDay = {
   key: string;
-  serviceDate: string;       // YYYY-MM-DD
-  windowStart: string;       // HH:mm
-  windowEnd: string;         // HH:mm
-  slotLengthMinutes: number; // 5..480
+  locationId: string;        // NEW
+  serviceDate: string;
+  windowStart: string;
+  windowEnd: string;
+  slotLengthMinutes: number;
   notes: string;
   autoGenerate: boolean;
 };
@@ -169,6 +171,7 @@ export default function LocationsPage() {
 
       setRows([{
         key: cryptoRandomKey(),
+        locationId: j.location.id, // NEW
         serviceDate: `${yyyy}-${mm}-${dd}`,
         windowStart: '09:00',
         windowEnd: '17:00',
@@ -189,19 +192,38 @@ export default function LocationsPage() {
 
   // ----- Step 2 helpers (Create) -----
   const addRow = () => {
-    setRows((r) => [
-      ...r,
-      {
-        key: cryptoRandomKey(),
-        serviceDate: '',
-        windowStart: '09:00',
-        windowEnd: '17:00',
-        slotLengthMinutes: 60,
-        notes: '',
-        autoGenerate: true,
-      },
-    ]);
+    setRows((prev) => {
+      const last = prev[prev.length - 1];
+      // default to the created location, or carry over the last row’s location
+      const baseLoc = (last?.locationId || createdLocation?.id || '');
+
+      // bump date by +1 day if last row has a date
+      let nextDate = '';
+      if (last?.serviceDate) {
+        const d = new Date(last.serviceDate + 'T00:00:00Z');
+        d.setUTCDate(d.getUTCDate() + 1);
+        const yyyy = d.getUTCFullYear();
+        const mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+        const dd = String(d.getUTCDate()).padStart(2, '0');
+        nextDate = `${yyyy}-${mm}-${dd}`;
+      }
+
+      return [
+        ...prev,
+        {
+          key: cryptoRandomKey(),
+          locationId: baseLoc,              // ✅ carries over
+          serviceDate: nextDate,            // ✅ bumps a day if possible
+          windowStart: last?.windowStart || '09:00',
+          windowEnd: last?.windowEnd || '17:00',
+          slotLengthMinutes: last?.slotLengthMinutes ?? 60,
+          notes: '',
+          autoGenerate: last?.autoGenerate ?? true,
+        },
+      ];
+    });
   };
+
   const removeRow = (key: string) => setRows((r) => r.filter((x) => x.key !== key));
   const updateRow = (key: string, patch: Partial<NewDay>) =>
     setRows((r) => r.map((x) => (x.key === key ? { ...x, ...patch } : x)));
@@ -221,11 +243,12 @@ export default function LocationsPage() {
     setSavingDays(true);
     try {
       for (const row of rows) {
+        const locId = row.locationId || createdLocation.id;
         const res = await fetch('/api/admin/service-days', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({
-            locationId: createdLocation.id,
+            locationId: locId,                  // UPDATED
             serviceDate: row.serviceDate,
             windowStart: row.windowStart,
             windowEnd: row.windowEnd,
@@ -470,23 +493,18 @@ export default function LocationsPage() {
                         </div>
                         <div className="grid gap-3 sm:grid-cols-2">
                           <div className="grid gap-2">
+                            <Label>Location</Label>
+                            <LocationCombobox
+                              value={row.locationId}
+                              onChange={(id) => updateRow(row.key, { locationId: id ?? '' })}
+                            />
+                          </div>
+                          <div className="grid gap-2">
                             <Label>Date</Label>
                             <Input
                               type="date"
                               value={row.serviceDate}
                               onChange={(e) => updateRow(row.key, { serviceDate: e.target.value })}
-                            />
-                          </div>
-                          <div className="grid gap-2">
-                            <Label>Slot length (minutes)</Label>
-                            <Input
-                              type="number"
-                              min={5}
-                              max={480}
-                              value={row.slotLengthMinutes}
-                              onChange={(e) =>
-                                updateRow(row.key, { slotLengthMinutes: Number(e.target.value) || 0 })
-                              }
                             />
                           </div>
                         </div>

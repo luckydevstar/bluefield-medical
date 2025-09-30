@@ -87,3 +87,62 @@ export async function DELETE(req: NextRequest) {
 
   return NextResponse.json({ ok: true });
 }
+
+export async function PATCH(req: NextRequest) {
+  const g = await requireAdmin();
+  if (!g.ok) return NextResponse.json({ error: 'forbidden' }, { status: g.status });
+
+  const {
+    id, locationId, serviceDate, windowStart, windowEnd, slotLengthMinutes, notes,
+    regenerateSlots = false,
+  } = await req.json();
+
+  if (!id) return NextResponse.json({ error: 'id required' }, { status: 400 });
+
+  const patch: any = {};
+  if (locationId) patch.location_id = locationId;
+  if (serviceDate) patch.service_date = serviceDate;
+  if (windowStart) patch.window_start = windowStart;
+  if (windowEnd) patch.window_end = windowEnd;
+  if (typeof slotLengthMinutes === 'number') patch.slot_length_minutes = slotLengthMinutes;
+  if (typeof notes === 'string') patch.notes = notes;
+
+  if (Object.keys(patch).length) {
+    const { error } = await supabaseAdmin.from('service_days').update(patch).eq('id', id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  if (regenerateSlots) {
+    // guard: confirmed bookings present?
+    const { data: slots, error: se } = await supabaseAdmin
+      .from('slots')
+      .select('id,status')
+      .eq('service_day_id', id);
+    if (se) return NextResponse.json({ error: se.message }, { status: 500 });
+
+    const slotIds = (slots ?? []).map(s => s.id);
+    if (slotIds.length) {
+      const { data: active, error: ae } = await supabaseAdmin
+        .from('bookings')
+        .select('id')
+        .in('slot_id', slotIds)
+        .eq('status', 'CONFIRMED');
+      if (ae) return NextResponse.json({ error: ae.message }, { status: 500 });
+      if ((active ?? []).length > 0) {
+        return NextResponse.json({ error: 'Cannot regenerate: confirmed bookings exist.' }, { status: 409 });
+      }
+      // clean up old
+      await supabaseAdmin.from('bookings').delete().in('slot_id', slotIds).in('status', ['CANCELLED', 'EXPIRED']);
+      await supabaseAdmin.from('slots').delete().eq('service_day_id', id).in('status', ['OPEN', 'BLOCKED']);
+    }
+
+    // reuse your existing generator endpoint
+    await fetch(new URL('/api/admin/generate-slots', req.url).toString(), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ serviceDayId: id }),
+    });
+  }
+
+  return NextResponse.json({ ok: true });
+}
