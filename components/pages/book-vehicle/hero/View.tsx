@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea'; // if you decide to add notes later
+import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import {
@@ -18,6 +18,10 @@ import {
 } from 'lucide-react';
 import LocationsMap from '@/components/common/LocationsMap';
 import PostcodeAutocomplete from '@/components/admin/PostcodeAutocomplete';
+import { Slider } from '@/components/ui/slider';
+
+// NEW: local (in-memory) autocomplete for the results list
+import AutocompleteSelect from '@/components/common/AutocompleteSelect';
 
 type Location = { id: string; name: string; postcode?: string | null };
 type ServiceDay = {
@@ -35,8 +39,8 @@ export function BookingVehicleView() {
     locationId: string;
     name: string;
     postcode: string | null;
-    lat: number | null;     // <-- add
-    lng: number | null;     // <-- add
+    lat: number | null;
+    lng: number | null;
     service_date: string;
     minStartUtc: string;
     maxEndUtc: string;
@@ -52,7 +56,6 @@ export function BookingVehicleView() {
       minute: '2-digit',
     });
   }
-  // robust UK date formatter (anchor at noon UTC to avoid DST/day roll)
   function formatUKDate(d: string) {
     const atNoonUTC = new Date(`${d}T12:00:00Z`);
     return atNoonUTC.toLocaleDateString('en-GB', {
@@ -71,11 +74,8 @@ export function BookingVehicleView() {
       const res = await fetch(`/api/available-locations?from=${today}`, { cache: 'no-store' });
       const json = await res.json();
       setAvailable(json.results ?? []);
-    } catch (e: any) {
-      // optional toast if you like
-    } finally {
-      setLoadingAvailable(false);
-    }
+    } catch { }
+    finally { setLoadingAvailable(false); }
   }
   React.useEffect(() => { loadAvailable(); }, []);
 
@@ -95,6 +95,11 @@ export function BookingVehicleView() {
   const [loadingSlots, setLoadingSlots] = React.useState(false);
   const [submitting, setSubmitting] = React.useState(false);
 
+  // --- slider in KILOMETERS; last tick is "National" ---
+  const MAX_RADIUS_KM = 300;
+  const [radiusKm, setRadiusKm] = React.useState(25);
+  const [isNational, setIsNational] = React.useState(false);
+
   const [form, setForm] = React.useState({
     orgName: '',
     contactName: '',
@@ -102,9 +107,9 @@ export function BookingVehicleView() {
     phone: '',
     attendees: 1,
     slotId: '',
+    postcode: '',
   });
 
-  // show status from /api/bookings/confirm redirect
   const status = sp.get('status');
 
   React.useEffect(() => {
@@ -116,7 +121,7 @@ export function BookingVehicleView() {
     } else if (status === 'invalid') {
       toast('Invalid link. The confirmation link was invalid. Try reserving again.');
     }
-  }, [status, toast]);
+  }, [status]);
 
   const mapMarkers = React.useMemo(
     () =>
@@ -144,19 +149,32 @@ export function BookingVehicleView() {
     setForm((f) => ({ ...f, slotId: '' }));
   };
 
-  // replace existing search()
+  // Clear postcode UI state when switching to National
+  React.useEffect(() => {
+    if (isNational) {
+      setPostcode('');
+      resetAfterSearch();
+      setLocations([]); // will be filled after National search
+    }
+  }, [isNational]);
+
+  // search: in National mode postcode is optional
   const search = async (overridePc?: string) => {
     const q = (overridePc ?? postcode).trim();
-    if (!q) {
+    if (!isNational && !q) {
       toast('Postcode required');
       return;
     }
     setLoadingSearch(true);
     try {
-      const res = await fetch(
-        `/api/locations?postcode=${encodeURIComponent(q)}&radiusKm=50`,
-        { cache: 'no-store' }
-      );
+      const params = new URLSearchParams();
+      if (isNational) {
+        params.set('national', '1');
+      } else {
+        params.set('postcode', q);
+        params.set('radiusKm', String(radiusKm));
+      }
+      const res = await fetch(`/api/locations?${params.toString()}`, { cache: 'no-store' });
       const json = await res.json();
       setLocations(json.locations ?? []);
       resetAfterSearch();
@@ -184,7 +202,7 @@ export function BookingVehicleView() {
       setSelectedServiceDay('');
       setSlots([]);
       setForm((f) => ({ ...f, slotId: '' }));
-    } catch (e: any) {
+    } catch {
       toast('Failed to load dates. Try again.');
     } finally {
       setLoadingDays(false);
@@ -202,7 +220,7 @@ export function BookingVehicleView() {
       if (!json.slots || json.slots.length === 0) {
         toast('No available slots. Please choose another date.');
       }
-    } catch (e: any) {
+    } catch {
       toast('Failed to load slots. Try again.');
     } finally {
       setLoadingSlots(false);
@@ -211,20 +229,16 @@ export function BookingVehicleView() {
 
   const validate = () => {
     if (!form.slotId) {
-      toast('Pick a time slot');
-      return false;
+      toast('Pick a time slot'); return false;
     }
-    if (!form.orgName.trim() || !form.contactName.trim() || !form.email.trim()) {
-      toast('Missing details. Organisation, contact name, and email are required.');
-      return false;
+    if (!form.orgName.trim() || !form.contactName.trim() || !form.email.trim() || !form.postcode.trim()) {
+      toast('Missing details. Organisation, contact name, postdoe, and email are required.'); return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      toast('Invalid email. Enter a valid email address.');
-      return false;
+      toast('Invalid email. Enter a valid email address.'); return false;
     }
     if (form.attendees < 1 || form.attendees > 500) {
-      toast('Attendees out of range. Enter between 1 and 500.');
-      return false;
+      toast('Attendees out of range. Enter between 1 and 500.'); return false;
     }
     return true;
   };
@@ -245,9 +259,8 @@ export function BookingVehicleView() {
       if (!res.ok) throw new Error(json.error ?? 'Failed to reserve');
 
       toast('Reservation created. Check your email to confirm within 10 minutes.');
-      // Optional: reset the personal details but keep search context
-      setForm((f) => ({ ...f, orgName: '', contactName: '', email: '', phone: '', attendees: 1, slotId: '' }));
-    } catch (err: any) {
+      setForm((f) => ({ ...f, orgName: '', contactName: '', email: '', phone: '', attendees: 1, slotId: '', postcode: '' }));
+    } catch {
       toast('Reservation failed. Please try again.');
     } finally {
       setSubmitting(false);
@@ -261,7 +274,6 @@ export function BookingVehicleView() {
         <h1 className="text-2xl font-semibold">Book a Bluefield Appointment</h1>
       </div>
 
-      {/* Status banner (also echoed via toasts) */}
       {status && (
         <Alert className={status === 'success' ? 'border-green-600/50' : 'border-amber-500/50'}>
           <AlertDescription className="flex items-center gap-2">
@@ -274,23 +286,19 @@ export function BookingVehicleView() {
         </Alert>
       )}
 
-      {/* Available locations (minimal) + Map */}
-      <div className="">
+      {/* Available locations + Map */}
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>Available locations (upcoming)</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            <div className='flex gap-4'>
-              <LocationsMap
-                className="h-[420px] w-full rounded-md border"
-                markers={mapMarkers}
-              />
+            <div className="flex gap-4">
+              <LocationsMap className="h-[420px] w-full rounded-md border" markers={mapMarkers} />
             </div>
           </CardContent>
         </Card>
       </div>
-
 
       {/* Step 1: Find a location */}
       <Card>
@@ -301,6 +309,42 @@ export function BookingVehicleView() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Radius (km) + National */}
+          <div className="grid gap-1 w-[500px]">
+            <Label>Search radius</Label>
+            <div className="flex items-center gap-3">
+              <span className="text-sm w-20 text-muted-foreground">
+                {isNational ? 'All UK' : `${radiusKm} km`}
+              </span>
+              <div className="flex-1">
+                <Slider
+                  value={[isNational ? MAX_RADIUS_KM : radiusKm]}
+                  min={1}
+                  max={MAX_RADIUS_KM}
+                  step={1}
+                  onValueChange={(value) => {
+                    const v = value[0];
+                    if (v >= MAX_RADIUS_KM) setIsNational(true);
+                    else { setIsNational(false); setRadiusKm(v); }
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsNational((p) => !p)}
+                className={`text-sm font-medium ${isNational ? 'opacity-100' : 'opacity-70 hover:opacity-100'}`}
+                aria-pressed={isNational}
+              >
+                National
+              </button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Drag to set kilometers, or snap to <span className="font-medium">National</span> for all UK locations.
+            </p>
+          </div>
+
+          {/* Postcode + Search (hidden in National mode) */}
+          {/* {!isNational && ( */}
           <div className="grid gap-2 sm:grid-cols-[1fr_auto] items-center">
             <div className="grid gap-2">
               <Label htmlFor="postcode">Your Location</Label>
@@ -308,16 +352,12 @@ export function BookingVehicleView() {
                 value={postcode}
                 onChange={(text) => setPostcode(text)}
                 onSelect={(s) => {
-                  // s: { postcode: string; lat: number; lng: number }
                   setPostcode(s.postcode);
-                  // auto-run the search when a suggestion is picked
                   search(s.postcode);
                 }}
                 placeholder="Start typing (e.g., SW1A 1AA)…"
               />
-              <p className="text-xs text-muted-foreground">
-                Tip: choose a suggestion to search automatically.
-              </p>
+              <p className="text-xs text-muted-foreground">Tip: choose a suggestion to search automatically.</p>
             </div>
             <div className="flex items-end">
               <Button onClick={() => search()} disabled={loadingSearch}>
@@ -326,26 +366,43 @@ export function BookingVehicleView() {
               </Button>
             </div>
           </div>
+          {/* )} */}
+
+          {/* In National mode you can just hit Search to load all UK locations */}
+          {/* {isNational && (
+            <div>
+              <Button onClick={() => search()} disabled={loadingSearch}>
+                {loadingSearch && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Load all UK locations
+              </Button>
+            </div>
+          )} */}
 
           <div className="grid gap-2 sm:grid-cols-2">
+            {/* Choose location – always via AutocompleteSelect over the current results list */}
             <div className="grid gap-2">
               <Label>Choose location</Label>
-              <Select
+              <AutocompleteSelect
                 value={selectedLocation}
-                onValueChange={(v) => loadDays(v)}
+                onChange={(id) => {
+                  if (id) loadDays(id);
+                  else {
+                    setSelectedLocation('');
+                    setServiceDays([]);
+                    setSlots([]);
+                  }
+                }}
+                options={locations.map((l) => ({
+                  value: l.id,
+                  label: l.name,
+                  sub: l.postcode ?? undefined,
+                }))}
+                placeholder={locations.length ? 'Search locations…' : 'Run a search first'}
                 disabled={locations.length === 0 || loadingDays || loadingSearch}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={locations.length ? 'Select a location' : 'Search to load locations'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {locations.map((l) => (
-                    <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              />
             </div>
 
+            {/* Choose date */}
             <div className="grid gap-2">
               <Label>Choose date</Label>
               <Select
@@ -409,14 +466,25 @@ export function BookingVehicleView() {
         </CardHeader>
         <CardContent>
           <form onSubmit={reserve} className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="orgName">Organisation</Label>
-              <Input
-                id="orgName"
-                value={form.orgName}
-                onChange={(e) => setForm((f) => ({ ...f, orgName: e.target.value }))}
-                placeholder="Your organisation"
-              />
+            <div className='grid md:grid-cols-[1fr_auto] gap-2'>
+              <div className="grid gap-2">
+                <Label htmlFor="orgName">Organisation (optional)</Label>
+                <Input
+                  id="orgName"
+                  value={form.orgName}
+                  onChange={(e) => setForm((f) => ({ ...f, orgName: e.target.value }))}
+                  placeholder="Your organisation"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="orgName">Postcode</Label>
+                <Input
+                  id="postCode"
+                  value={form.postcode}
+                  onChange={(e) => setForm((f) => ({ ...f, postcode: e.target.value }))}
+                  placeholder="Your Postcode"
+                />
+              </div>
             </div>
 
             <div className="grid gap-2 md:grid-cols-2">

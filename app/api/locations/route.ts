@@ -7,6 +7,7 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const postcode = searchParams.get('postcode');
   const radiusKm = Number(searchParams.get('radiusKm') ?? '50');
+  const isNational = searchParams.get('national') === '1';
 
   const { data: locations, error } = await supabaseAdmin
     .from('locations')
@@ -14,8 +15,15 @@ export async function GET(req: NextRequest) {
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  // If no postcode, just return everything (same as before)
   if (!postcode) return NextResponse.json({ locations });
 
+  // National = ignore distance filter and return all locations (UK-wide)
+  if (isNational) {
+    return NextResponse.json({ locations });
+  }
+
+  // Otherwise, distance filter around the postcode
   const center = await geocodePostcodeUK(postcode);
   if (!center) return NextResponse.json({ error: 'Invalid postcode' }, { status: 400 });
 
