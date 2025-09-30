@@ -303,7 +303,7 @@ export function BookingVehicleView() {
         <CardContent className="space-y-4">
           <div className="grid gap-2 sm:grid-cols-[1fr_auto] items-center">
             <div className="grid gap-2">
-              <Label htmlFor="postcode">Your postcode</Label>
+              <Label htmlFor="postcode">Your Location</Label>
               <PostcodeAutocomplete
                 value={postcode}
                 onChange={(text) => setPostcode(text)}
